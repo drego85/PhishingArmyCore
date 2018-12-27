@@ -19,7 +19,7 @@ BlockList = []
 BlockListExtended = []
 BlockListWildcard = []
 
-# Inizializzo i LOG ignorando i messaggi standard delle librerie requests e urllib3
+# Inizializzo i LOG
 logging.basicConfig(filename="phishing.log",
                     format="%(asctime)s - %(funcName)10s():%(lineno)s - %(levelname)s - %(message)s",
                     level=logging.INFO)
@@ -157,15 +157,15 @@ def main():
     phishtank()
 
     # Carico le segnalazioni convalidate da OpenPhish
-    # openphish()
+    openphish()
 
-    # Eliminio documenti e ordino le liste generate
-    BlockList2 = sorted(set(BlockList))
-    BlockListExtended2 = sorted(set(BlockListExtended))
-    BlockListWildcard2 = sorted(set(BlockListWildcard))
+    # Eliminio doppioni e ordino le liste generate
+    BlockListSorted = sorted(set(BlockList))
+    BlockListExtendedSorted = sorted(set(BlockListExtended))
+    BlockListWildcardSorted = sorted(set(BlockListWildcard))
 
-    logging.info("Generata la Blocklist contenente %s dominii" % len(BlockList2))
-    logging.info("Generata la Blocklist Extended contenente %s dominii" % len(BlockListExtended2))
+    logging.info("Generata la Blocklist contenente %s dominii" % len(BlockListSorted))
+    logging.info("Generata la Blocklist Extended contenente %s dominii" % len(BlockListExtendedSorted))
 
     banner = "# \n" \
              "# Phishing Army | The Blocklist to filter Phishing \n" \
@@ -192,7 +192,7 @@ def main():
                      "# \n" \
                      "# Last Update: %s\n" \
                      "# \n" \
-                     "# This is the wildcard version (WARNING, it is not compatible with PiHole!), for the normal/extend version go to the project website.\n" \
+                     "# This is the wildcard version (WARNING, it is not compatible with PiHole!), for the normal/extended version go to the project website.\n" \
                      "# \n" \
                      "# Project website: https://phishing.army \n" \
                      "# ===================================================\n" % datetime.utcnow().strftime(
@@ -204,21 +204,21 @@ def main():
 
         f.write("%s\n" % banner)
 
-        for item in BlockList2:
+        for item in BlockListSorted:
             f.write("%s\n" % item)
 
     with open("/home/phisarmy/public_html/download/phishing_army_blocklist_extended.txt", "w") as f:
 
         f.write("%s\n" % bannerextended)
 
-        for item in BlockListExtended2:
+        for item in BlockListExtendedSorted:
             f.write("%s\n" % item)
 
     with open("/home/phisarmy/public_html/download/phishing_army_blocklist_wildcard.txt", "w") as f:
 
         f.write("%s\n" % bannerwildcard)
 
-        for item in BlockListWildcard2:
+        for item in BlockListWildcardSorted:
             f.write("*.%s\n" % item)
 
 
