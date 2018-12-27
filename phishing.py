@@ -68,6 +68,7 @@ def openphish():
         if r.status_code is 200:
             for line in r.iter_lines():
                 url = line.decode("utf-8")
+                url = url.lower()
 
                 registered_domain = tldcache(url).registered_domain
                 sub_domain = tldcache(url).subdomain
