@@ -174,6 +174,8 @@ def main():
              "# Last Update: %s\n" \
              "# \n" \
              "# Project website: https://phishing.army \n" \
+             "# \n" \
+             "# This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License. \n" \
              "# ===================================================\n" % datetime.utcnow().strftime(
         "%a, %d %b %Y %H:%M:%S UTC")
 
@@ -185,6 +187,8 @@ def main():
                      "# This is the extended version (also contains domains without subdomains), for the normal version go to the project website.\n" \
                      "# \n" \
                      "# Project website: https://phishing.army \n" \
+                     "# \n" \
+                     "# This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License. \n" \
                      "# ===================================================\n" % datetime.utcnow().strftime(
         "%a, %d %b %Y %H:%M:%S UTC")
 
@@ -196,6 +200,8 @@ def main():
                      "# This is the wildcard version (WARNING, it is not compatible with PiHole!), for the normal/extended version go to the project website.\n" \
                      "# \n" \
                      "# Project website: https://phishing.army \n" \
+                     "# \n" \
+                     "# This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License. \n" \
                      "# ===================================================\n" % datetime.utcnow().strftime(
         "%a, %d %b %Y %H:%M:%S UTC")
 
