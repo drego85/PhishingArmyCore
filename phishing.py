@@ -14,7 +14,6 @@ headerdesktop = {"User-Agent": "Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6
 tldcache = tldextract.TLDExtract(cache_file="./.tld_set")
 
 WhiteList = []
-AlexaList = []
 BlockList = []
 BlockListExtended = []
 BlockListWildcard = []
@@ -51,7 +50,7 @@ def phishtank():
                 else:
                     full_domain = registered_domain
 
-                if registered_domain and registered_domain not in WhiteList and registered_domain not in AlexaList:
+                if registered_domain and registered_domain not in WhiteList:
                     BlockList.append(full_domain)
                     BlockListExtended.append(full_domain)
                     BlockListWildcard.append(registered_domain)
@@ -78,7 +77,7 @@ def openphish():
                 else:
                     full_domain = registered_domain
 
-                if registered_domain and registered_domain not in WhiteList and registered_domain not in AlexaList:
+                if registered_domain and registered_domain not in WhiteList:
                     BlockList.append(full_domain)
                     BlockListExtended.append(full_domain)
                     BlockListWildcard.append(registered_domain)
@@ -91,68 +90,95 @@ def openphish():
 
 
 def whitelist():
-    urldownload = "https://raw.githubusercontent.com/anudeepND/whitelist/master/domains/whitelist.txt"
-    r = requests.get(urldownload, headers=headerdesktop, timeout=timeoutconnection)
+    try:
+        urldownload = "https://raw.githubusercontent.com/anudeepND/whitelist/master/domains/whitelist.txt"
+        r = requests.get(urldownload, headers=headerdesktop, timeout=timeoutconnection)
 
-    if r.status_code is 200:
-        for line in r.iter_lines():
-            line = line.decode("utf-8")
+        if r.status_code is 200:
+            for line in r.iter_lines():
+                line = line.decode("utf-8")
+                if line:
+                    line = line.rstrip()
+                    line = line.lower()
+                    analyzeddomain = tldcache(line).registered_domain
+                    if analyzeddomain:
+                        WhiteList.append(analyzeddomain.lower())
+    except Exception as e:
+        logging.error(e, exc_info=True)
+        pass
+
+    try:
+        urldownload = "https://raw.githubusercontent.com/anudeepND/whitelist/master/domains/referral-sites.txt"
+        r = requests.get(urldownload, headers=headerdesktop, timeout=timeoutconnection)
+
+        if r.status_code is 200:
+            for line in r.iter_lines():
+                line = line.decode("utf-8")
+                if line:
+                    line = line.rstrip()
+                    line = line.lower()
+                    analyzeddomain = tldcache(line).registered_domain
+                    if analyzeddomain:
+                        WhiteList.append(analyzeddomain.lower())
+    except Exception as e:
+        logging.error(e, exc_info=True)
+        pass
+
+    try:
+        urldownload = "https://raw.githubusercontent.com/anudeepND/whitelist/master/domains/optional-list.txt"
+        r = requests.get(urldownload, headers=headerdesktop, timeout=timeoutconnection)
+
+        if r.status_code is 200:
+            for line in r.iter_lines():
+                line = line.decode("utf-8")
+                if line:
+                    line = line.rstrip()
+                    line = line.lower()
+                    analyzeddomain = tldcache(line).registered_domain
+                    if analyzeddomain:
+                        WhiteList.append(analyzeddomain.lower())
+    except Exception as e:
+        logging.error(e, exc_info=True)
+        pass
+
+    try:
+        # Source https://s3.amazonaws.com/alexa-static/top-1m.csv.zip
+        f = open("./list/alexa-top-1m.txt", "r")
+
+        for line in f:
             if line:
                 line = line.rstrip()
                 line = line.lower()
                 analyzeddomain = tldcache(line).registered_domain
                 if analyzeddomain:
-                    WhiteList.append(analyzeddomain.lower())
+                    WhiteList.append(analyzeddomain)
+        f.close()
 
-    urldownload = "https://raw.githubusercontent.com/anudeepND/whitelist/master/domains/referral-sites.txt"
-    r = requests.get(urldownload, headers=headerdesktop, timeout=timeoutconnection)
+    except Exception as e:
+        logging.error(e, exc_info=True)
+        pass
 
-    if r.status_code is 200:
-        for line in r.iter_lines():
-            line = line.decode("utf-8")
+    try:
+        f = open("./list/personal_whitelist.txt", "r")
+
+        for line in f:
             if line:
                 line = line.rstrip()
                 line = line.lower()
                 analyzeddomain = tldcache(line).registered_domain
                 if analyzeddomain:
-                    WhiteList.append(analyzeddomain.lower())
+                    WhiteList.append(analyzeddomain)
+        f.close()
 
-    urldownload = "https://raw.githubusercontent.com/anudeepND/whitelist/master/domains/optional-list.txt"
-    r = requests.get(urldownload, headers=headerdesktop, timeout=timeoutconnection)
-
-    if r.status_code is 200:
-        for line in r.iter_lines():
-            line = line.decode("utf-8")
-            if line:
-                line = line.rstrip()
-                line = line.lower()
-                analyzeddomain = tldcache(line).registered_domain
-                if analyzeddomain:
-                    WhiteList.append(analyzeddomain.lower())
-
-
-def alexalist():
-    # Source https://s3.amazonaws.com/alexa-static/top-1m.csv.zip
-    f = open("./list/alexa-top-1m.txt", "r")
-
-    for line in f:
-        if line:
-            line = line.rstrip()
-            line = line.lower()
-            analyzeddomain = tldcache(line).registered_domain
-            if analyzeddomain:
-                AlexaList.append(analyzeddomain)
-    f.close()
+    except Exception as e:
+        logging.error(e, exc_info=True)
+        pass
 
 
 def main():
     # Carico le Whitelist
     whitelist()
     logging.info("Download di %s dominii da WhiteList" % len(WhiteList))
-
-    # Carico i TOP Domain provenienti da Alexa Rank
-    alexalist()
-    logging.info("Caricati %s dominii da Alexa" % len(AlexaList))
 
     # Carico le segnalazioni convalidate di Phishtank
     phishtank()
