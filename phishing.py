@@ -3,6 +3,7 @@ import os
 import sys
 import gzip
 import json
+import Config
 import logging
 import requests
 import tldextract
@@ -25,7 +26,7 @@ logging.basicConfig(filename="phishing.log",
 
 
 def phishtank():
-    urldownload = "https://data.phishtank.com/data/online-valid.json.gz"
+    urldownload = "https://data.phishtank.com/data/" + Config.phishtanktoken + "online-valid.json.gz"
 
     r = requests.get(urldownload, headers=headerdesktop, timeout=timeoutconnection)
 
