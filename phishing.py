@@ -233,21 +233,21 @@ def main():
         "%a, %d %b %Y %H:%M:%S UTC")
 
     # Procedo a scrivere il contenuto
-    with open("/home/phisarmy/public_html/download/phishing_army_blocklist.txt", "w") as f:
+    with open(Config.outputdirectory + "phishing_army_blocklist.txt", "w") as f:
 
         f.write("%s\n" % banner)
 
         for item in BlockListSorted:
             f.write("%s\n" % item)
 
-    with open("/home/phisarmy/public_html/download/phishing_army_blocklist_extended.txt", "w") as f:
+    with open(Config.outputdirectory + "phishing_army_blocklist_extended.txt", "w") as f:
 
         f.write("%s\n" % bannerextended)
 
         for item in BlockListExtendedSorted:
             f.write("%s\n" % item)
 
-    with open("/home/phisarmy/public_html/download/phishing_army_blocklist_wildcard.txt", "w") as f:
+    with open(Config.outputdirectory + "phishing_army_blocklist_wildcard.txt", "w") as f:
 
         f.write("%s\n" % bannerwildcard)
 

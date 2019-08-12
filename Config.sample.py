@@ -1,1 +1,2 @@
 phishtanktoken = ""
+outputdirectory = ""
