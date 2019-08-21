@@ -94,9 +94,11 @@ def phishfindr():
     urlList = [
         "https://raw.githubusercontent.com/mitchellkrogza/Phishing.Database/master/phishing-links-ACTIVE-NOW.txt",
         "https://raw.githubusercontent.com/mitchellkrogza/Phishing.Database/master/phishing-links-ACTIVE-TODAY.txt",
-        "https://github.com/mitchellkrogza/Phishing.Database/raw/master/phishing-links-ACTIVE.txt",
         "https://raw.githubusercontent.com/mitchellkrogza/Phishing.Database/master/phishing-links-NEW-last-hour.txt",
         "https://raw.githubusercontent.com/mitchellkrogza/Phishing.Database/master/phishing-links-NEW-today.txt"]
+
+    # La seguente lista è stata esclusa poichè troppo ampia da elaborare attualmente
+    # https://github.com/mitchellkrogza/Phishing.Database/raw/master/phishing-links-ACTIVE.txt
 
     for urldownload in urlList:
         try:
