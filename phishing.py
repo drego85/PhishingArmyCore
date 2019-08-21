@@ -90,6 +90,43 @@ def openphish():
         raise
 
 
+def phishfindr():
+    urlList = [
+        "https://raw.githubusercontent.com/mitchellkrogza/Phishing.Database/master/phishing-links-ACTIVE-NOW.txt",
+        "https://raw.githubusercontent.com/mitchellkrogza/Phishing.Database/master/phishing-links-ACTIVE-TODAY.txt",
+        "https://github.com/mitchellkrogza/Phishing.Database/raw/master/phishing-links-ACTIVE.txt",
+        "https://raw.githubusercontent.com/mitchellkrogza/Phishing.Database/master/phishing-links-NEW-last-hour.txt",
+        "https://raw.githubusercontent.com/mitchellkrogza/Phishing.Database/master/phishing-links-NEW-today.txt"]
+
+    for urldownload in urlList:
+        try:
+            r = requests.get(urldownload, headers=headerdesktop, timeout=timeoutconnection)
+
+            if r.status_code is 200:
+                for line in r.iter_lines():
+                    url = line.decode("utf-8")
+                    url = url.lower()
+
+                    registered_domain = tldcache(url).registered_domain
+                    sub_domain = tldcache(url).subdomain
+
+                    if sub_domain:
+                        full_domain = sub_domain + "." + registered_domain
+                    else:
+                        full_domain = registered_domain
+
+                    if registered_domain and registered_domain not in WhiteList:
+                        BlockList.append(full_domain)
+                        BlockListExtended.append(full_domain)
+                        BlockListWildcard.append(registered_domain)
+                        if full_domain != registered_domain:
+                            BlockListExtended.append(registered_domain)
+
+        except Exception as e:
+            logging.error(e, exc_info=True)
+            raise
+
+
 def whitelist():
     try:
         urldownload = "https://raw.githubusercontent.com/anudeepND/whitelist/master/domains/whitelist.txt"
@@ -186,6 +223,9 @@ def main():
 
     # Carico le segnalazioni convalidate da OpenPhish
     openphish()
+
+    # Carico le segnalazioni convalida da PhishFindR
+    phishfindr()
 
     # Eliminio doppioni e ordino le liste generate
     BlockListSorted = sorted(set(BlockList))
