@@ -12,6 +12,10 @@ from datetime import datetime, timedelta
 timeoutconnection = 120
 headerdesktop = {"User-Agent": "Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; WOW64; Trident/6.0)",
                  "Accept-Language": "it"}
+
+headerphishtank = {"User-Agent": "Phishtank/phishingarmy",
+                 "Accept-Language": "it"}
+
 tldcache = tldextract.TLDExtract(cache_file="./.tld_set")
 
 WhiteList = []
@@ -95,9 +99,10 @@ def phishfindr():
         "https://raw.githubusercontent.com/mitchellkrogza/Phishing.Database/master/phishing-links-ACTIVE-NOW.txt",
         "https://raw.githubusercontent.com/mitchellkrogza/Phishing.Database/master/phishing-links-ACTIVE-TODAY.txt",
         "https://raw.githubusercontent.com/mitchellkrogza/Phishing.Database/master/phishing-links-NEW-last-hour.txt",
-        "https://raw.githubusercontent.com/mitchellkrogza/Phishing.Database/master/phishing-links-NEW-today.txt"]
+        "https://raw.githubusercontent.com/mitchellkrogza/Phishing.Database/master/phishing-links-NEW-today.txt",
+        "https://raw.githubusercontent.com/mitchellkrogza/Phishing.Database/master/phishing-links-ACTIVE.txt"]
 
-    # La seguente lista è stata esclusa poichè troppo ampia da elaborare attualmente
+    # La seguente lista è stata esclusa poichè troppo ampia da elaborare
     # https://github.com/mitchellkrogza/Phishing.Database/raw/master/phishing-links-ACTIVE.txt
 
     for urldownload in urlList:
