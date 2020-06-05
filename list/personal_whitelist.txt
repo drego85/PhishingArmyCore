@@ -4,3 +4,5 @@ forms.gle
 googlezip.net
 htmlpasta.com
 googleusercontent.com
+microsoftemail.com
+nsupdate.info
