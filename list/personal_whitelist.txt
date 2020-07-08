@@ -1,8 +1,9 @@
 db.tt
-lnkd.in
 forms.gle
+googleusercontent.com
 googlezip.net
 htmlpasta.com
-googleusercontent.com
+lnkd.in
 microsoftemail.com
+netlify.app
 nsupdate.info

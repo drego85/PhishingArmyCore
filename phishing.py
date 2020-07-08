@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 import os
 import sys
 import gzip
@@ -7,34 +7,34 @@ import Config
 import logging
 import requests
 import tldextract
-from datetime import datetime, timedelta
+from datetime import datetime
 
 timeoutconnection = 120
 headerdesktop = {"User-Agent": "Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; WOW64; Trident/6.0)",
                  "Accept-Language": "it"}
 
 headerphishtank = {"User-Agent": "Phishtank/phishingarmy",
-                 "Accept-Language": "it"}
+                   "Accept-Language": "it"}
 
 tldcache = tldextract.TLDExtract(cache_file="./.tld_set")
 
 WhiteList = []
 BlockList = []
 BlockListExtended = []
-BlockListWildcard = []
 
-# Inizializzo i LOG
+# LOG initialization
 logging.basicConfig(filename="phishing.log",
                     format="%(asctime)s - %(funcName)10s():%(lineno)s - %(levelname)s - %(message)s",
                     level=logging.INFO)
 
 
+# Download data from phishtank.com
 def phishtank():
     urldownload = "https://data.phishtank.com/data/" + Config.phishtanktoken + "online-valid.json.gz"
 
     r = requests.get(urldownload, headers=headerdesktop, timeout=timeoutconnection)
 
-    if r.status_code is 200:
+    if r.status_code == 200:
 
         with open("./list/online-valid.json.gz", "wb") as f:
             f.write(r.content)
@@ -48,52 +48,56 @@ def phishtank():
         if data:
             for each in data:
                 url = each["url"].lower()
-                registered_domain = tldcache(url).registered_domain
-                sub_domain = tldcache(url).subdomain
-                if sub_domain:
-                    full_domain = sub_domain + "." + registered_domain
-                else:
-                    full_domain = registered_domain
+                url = url.rstrip()
+                if url:
+                    registered_domain = tldcache(url).registered_domain
+                    sub_domain = tldcache(url).subdomain
+                    if sub_domain:
+                        full_domain = sub_domain + "." + registered_domain
+                    else:
+                        full_domain = registered_domain
 
-                if registered_domain and registered_domain not in WhiteList:
-                    BlockList.append(full_domain)
-                    BlockListExtended.append(full_domain)
-                    BlockListWildcard.append(registered_domain)
-                    if full_domain != registered_domain:
-                        BlockListExtended.append(registered_domain)
+                    if registered_domain and registered_domain not in WhiteList:
+                        BlockList.append(full_domain)
+                        BlockListExtended.append(full_domain)
+                        if full_domain != registered_domain:
+                            BlockListExtended.append(registered_domain)
 
 
+# Download data from OpenPhishing.com
 def openphish():
     urldownload = "https://openphish.com/feed.txt"
 
     try:
         r = requests.get(urldownload, headers=headerdesktop, timeout=timeoutconnection)
 
-        if r.status_code is 200:
+        if r.status_code == 200:
             for line in r.iter_lines():
-                url = line.decode("utf-8")
-                url = url.lower()
+                line = line.rstrip()
+                if line:
+                    url = line.decode("utf-8")
+                    url = url.lower()
 
-                registered_domain = tldcache(url).registered_domain
-                sub_domain = tldcache(url).subdomain
+                    registered_domain = tldcache(url).registered_domain
+                    sub_domain = tldcache(url).subdomain
 
-                if sub_domain:
-                    full_domain = sub_domain + "." + registered_domain
-                else:
-                    full_domain = registered_domain
+                    if sub_domain:
+                        full_domain = sub_domain + "." + registered_domain
+                    else:
+                        full_domain = registered_domain
 
-                if registered_domain and registered_domain not in WhiteList:
-                    BlockList.append(full_domain)
-                    BlockListExtended.append(full_domain)
-                    BlockListWildcard.append(registered_domain)
-                    if full_domain != registered_domain:
-                        BlockListExtended.append(registered_domain)
+                    if registered_domain and registered_domain not in WhiteList:
+                        BlockList.append(full_domain)
+                        BlockListExtended.append(full_domain)
+                        if full_domain != registered_domain:
+                            BlockListExtended.append(registered_domain)
 
     except Exception as e:
         logging.error(e, exc_info=True)
         raise
 
 
+# Download data from PhishFindR
 def phishfindr():
     urlList = [
         "https://raw.githubusercontent.com/mitchellkrogza/Phishing.Database/master/phishing-links-ACTIVE-NOW.txt",
@@ -109,8 +113,43 @@ def phishfindr():
         try:
             r = requests.get(urldownload, headers=headerdesktop, timeout=timeoutconnection)
 
-            if r.status_code is 200:
+            if r.status_code == 200:
                 for line in r.iter_lines():
+                    line = line.rstrip()
+                    if line:
+                        url = line.decode("utf-8")
+                        url = url.lower()
+
+                        registered_domain = tldcache(url).registered_domain
+                        sub_domain = tldcache(url).subdomain
+
+                        if sub_domain:
+                            full_domain = sub_domain + "." + registered_domain
+                        else:
+                            full_domain = registered_domain
+
+                        if registered_domain and registered_domain not in WhiteList:
+                            BlockList.append(full_domain)
+                            BlockListExtended.append(full_domain)
+                            if full_domain != registered_domain:
+                                BlockListExtended.append(registered_domain)
+
+        except Exception as e:
+            logging.error(e, exc_info=True)
+            raise
+
+
+# Download data from Cert.pl
+def certpl():
+    urldownload = "https://hole.cert.pl/domains/domains.txt"
+
+    try:
+        r = requests.get(urldownload, headers=headerdesktop, timeout=timeoutconnection)
+
+        if r.status_code == 200:
+            for line in r.iter_lines():
+                line = line.rstrip()
+                if line:
                     url = line.decode("utf-8")
                     url = url.lower()
 
@@ -125,21 +164,21 @@ def phishfindr():
                     if registered_domain and registered_domain not in WhiteList:
                         BlockList.append(full_domain)
                         BlockListExtended.append(full_domain)
-                        BlockListWildcard.append(registered_domain)
                         if full_domain != registered_domain:
                             BlockListExtended.append(registered_domain)
 
-        except Exception as e:
-            logging.error(e, exc_info=True)
-            raise
+    except Exception as e:
+        logging.error(e, exc_info=True)
+        raise
 
 
+# Load WhiteList
 def whitelist():
     try:
         urldownload = "https://raw.githubusercontent.com/anudeepND/whitelist/master/domains/whitelist.txt"
         r = requests.get(urldownload, headers=headerdesktop, timeout=timeoutconnection)
 
-        if r.status_code is 200:
+        if r.status_code == 200:
             for line in r.iter_lines():
                 line = line.decode("utf-8")
                 if line:
@@ -156,7 +195,7 @@ def whitelist():
         urldownload = "https://raw.githubusercontent.com/anudeepND/whitelist/master/domains/referral-sites.txt"
         r = requests.get(urldownload, headers=headerdesktop, timeout=timeoutconnection)
 
-        if r.status_code is 200:
+        if r.status_code == 200:
             for line in r.iter_lines():
                 line = line.decode("utf-8")
                 if line:
@@ -173,7 +212,7 @@ def whitelist():
         urldownload = "https://raw.githubusercontent.com/anudeepND/whitelist/master/domains/optional-list.txt"
         r = requests.get(urldownload, headers=headerdesktop, timeout=timeoutconnection)
 
-        if r.status_code is 200:
+        if r.status_code == 200:
             for line in r.iter_lines():
                 line = line.decode("utf-8")
                 if line:
@@ -221,26 +260,28 @@ def whitelist():
 
 
 def main():
-    # Carico le Whitelist
+    # Whitelist loading
     whitelist()
-    logging.info("Download di %s dominii da WhiteList" % len(WhiteList))
+    logging.info("Loading %s domain in whitelist" % len(WhiteList))
 
-    # Carico le segnalazioni convalidate di Phishtank
+    # PhishTank loading
     phishtank()
 
-    # Carico le segnalazioni convalidate da OpenPhish
+    # OpenPhish loading
     openphish()
 
-    # Carico le segnalazioni convalida da PhishFindR
+    # PhishFindR loading
     phishfindr()
 
-    # Eliminio doppioni e ordino le liste generate
+    # Cert.pl loading
+    certpl()
+
+    # Eliminate duplicates and sort the generated lists
     BlockListSorted = sorted(set(BlockList))
     BlockListExtendedSorted = sorted(set(BlockListExtended))
-    BlockListWildcardSorted = sorted(set(BlockListWildcard))
 
-    logging.info("Generata la Blocklist contenente %s dominii" % len(BlockListSorted))
-    logging.info("Generata la Blocklist Extended contenente %s dominii" % len(BlockListExtendedSorted))
+    logging.info("Generated the Blocklist containing %s domains" % len(BlockListSorted))
+    logging.info("Generated the Extended Blocklist containing %s domains" % len(BlockListExtendedSorted))
 
     banner = "# \n" \
              "# Phishing Army | The Blocklist to filter Phishing \n" \
@@ -266,19 +307,6 @@ def main():
                      "# ======================================================================================================\n" % datetime.utcnow().strftime(
         "%a, %d %b %Y %H:%M:%S UTC")
 
-    bannerwildcard = "# \n" \
-                     "# Phishing Army | The Blocklist to filter Phishing \n" \
-                     "# \n" \
-                     "# Last Update: %s\n" \
-                     "# \n" \
-                     "# This is the wildcard version, it is not compatible with Pi-Hole.\n" \
-                     "# \n" \
-                     "# Project website: https://phishing.army \n" \
-                     "# \n" \
-                     "# This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License. \n" \
-                     "# ======================================================================================================\n" % datetime.utcnow().strftime(
-        "%a, %d %b %Y %H:%M:%S UTC")
-
     # Procedo a scrivere il contenuto
     with open(Config.outputdirectory + "phishing_army_blocklist.txt", "w") as f:
 
@@ -293,13 +321,6 @@ def main():
 
         for item in BlockListExtendedSorted:
             f.write("%s\n" % item)
-
-    with open(Config.outputdirectory + "phishing_army_blocklist_wildcard.txt", "w") as f:
-
-        f.write("%s\n" % bannerwildcard)
-
-        for item in BlockListWildcardSorted:
-            f.write("*.%s\n" % item)
 
 
 if __name__ == "__main__":
