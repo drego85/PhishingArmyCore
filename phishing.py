@@ -1,4 +1,11 @@
 #!/usr/bin/env python3
+# This file is part of Phishing Army.
+#
+# Phishing Army was made with ♥ by Andrea Draghetti
+#
+# This file may be licensed under the terms of of the
+# GNU General Public License Version 3 (the ``GPL'').
+#
 import os
 import sys
 import gzip
