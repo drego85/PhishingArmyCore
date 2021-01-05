@@ -25,9 +25,9 @@ headerphishtank = {"User-Agent": "Phishtank/phishingarmy",
 
 tldcache = tldextract.TLDExtract(cache_file="./.tld_set")
 
-WhiteList = []
-BlockList = []
-BlockListExtended = []
+white_list = []
+block_list = []
+block_list_extended = []
 
 # LOG initialization
 logging.basicConfig(filename="phishing.log",
@@ -64,11 +64,11 @@ def phishtank():
                     else:
                         full_domain = registered_domain
 
-                    if registered_domain and registered_domain not in WhiteList:
-                        BlockList.append(full_domain)
-                        BlockListExtended.append(full_domain)
+                    if registered_domain and registered_domain not in white_list:
+                        block_list.append(full_domain)
+                        block_list_extended.append(full_domain)
                         if full_domain != registered_domain:
-                            BlockListExtended.append(registered_domain)
+                            block_list_extended.append(registered_domain)
 
 
 # Download data from OpenPhishing.com
@@ -93,11 +93,11 @@ def openphish():
                     else:
                         full_domain = registered_domain
 
-                    if registered_domain and registered_domain not in WhiteList:
-                        BlockList.append(full_domain)
-                        BlockListExtended.append(full_domain)
+                    if registered_domain and registered_domain not in white_list:
+                        block_list.append(full_domain)
+                        block_list_extended.append(full_domain)
                         if full_domain != registered_domain:
-                            BlockListExtended.append(registered_domain)
+                            block_list_extended.append(registered_domain)
 
     except Exception as e:
         logging.error(e, exc_info=True)
@@ -135,11 +135,11 @@ def phishfindr():
                         else:
                             full_domain = registered_domain
 
-                        if registered_domain and registered_domain not in WhiteList:
-                            BlockList.append(full_domain)
-                            BlockListExtended.append(full_domain)
+                        if registered_domain and registered_domain not in white_list:
+                            block_list.append(full_domain)
+                            block_list_extended.append(full_domain)
                             if full_domain != registered_domain:
-                                BlockListExtended.append(registered_domain)
+                                block_list_extended.append(registered_domain)
 
         except Exception as e:
             logging.error(e, exc_info=True)
@@ -168,11 +168,11 @@ def certpl():
                     else:
                         full_domain = registered_domain
 
-                    if registered_domain and registered_domain not in WhiteList:
-                        BlockList.append(full_domain)
-                        BlockListExtended.append(full_domain)
+                    if registered_domain and registered_domain not in white_list:
+                        block_list.append(full_domain)
+                        block_list_extended.append(full_domain)
                         if full_domain != registered_domain:
-                            BlockListExtended.append(registered_domain)
+                            block_list_extended.append(registered_domain)
 
     except Exception as e:
         logging.error(e, exc_info=True)
@@ -191,9 +191,9 @@ def whitelist():
                 if line:
                     line = line.rstrip()
                     line = line.lower()
-                    analyzeddomain = tldcache(line).registered_domain
-                    if analyzeddomain:
-                        WhiteList.append(analyzeddomain.lower())
+                    analyzed_domain = tldcache(line).registered_domain
+                    if analyzed_domain:
+                        white_list.append(analyzed_domain.lower())
     except Exception as e:
         logging.error(e, exc_info=True)
         pass
@@ -208,9 +208,9 @@ def whitelist():
                 if line:
                     line = line.rstrip()
                     line = line.lower()
-                    analyzeddomain = tldcache(line).registered_domain
-                    if analyzeddomain:
-                        WhiteList.append(analyzeddomain.lower())
+                    analyzed_domain = tldcache(line).registered_domain
+                    if analyzed_domain:
+                        white_list.append(analyzed_domain.lower())
     except Exception as e:
         logging.error(e, exc_info=True)
         pass
@@ -225,9 +225,9 @@ def whitelist():
                 if line:
                     line = line.rstrip()
                     line = line.lower()
-                    analyzeddomain = tldcache(line).registered_domain
-                    if analyzeddomain:
-                        WhiteList.append(analyzeddomain.lower())
+                    analyzed_domain = tldcache(line).registered_domain
+                    if analyzed_domain:
+                        white_list.append(analyzed_domain.lower())
     except Exception as e:
         logging.error(e, exc_info=True)
         pass
@@ -240,9 +240,9 @@ def whitelist():
             if line:
                 line = line.rstrip()
                 line = line.lower()
-                analyzeddomain = tldcache(line).registered_domain
-                if analyzeddomain:
-                    WhiteList.append(analyzeddomain)
+                analyzed_domain = tldcache(line).registered_domain
+                if analyzed_domain:
+                    white_list.append(analyzed_domain)
         f.close()
 
     except Exception as e:
@@ -256,9 +256,9 @@ def whitelist():
             if line:
                 line = line.rstrip()
                 line = line.lower()
-                analyzeddomain = tldcache(line).registered_domain
-                if analyzeddomain:
-                    WhiteList.append(analyzeddomain)
+                analyzed_domain = tldcache(line).registered_domain
+                if analyzed_domain:
+                    white_list.append(analyzed_domain)
         f.close()
 
     except Exception as e:
@@ -269,7 +269,7 @@ def whitelist():
 def main():
     # Whitelist loading
     whitelist()
-    logging.info("Loading %s domain in whitelist" % len(WhiteList))
+    logging.info("Loading %s domain in white_list" % len(white_list))
 
     # PhishTank loading
     phishtank()
@@ -284,11 +284,11 @@ def main():
     certpl()
 
     # Eliminate duplicates and sort the generated lists
-    BlockListSorted = sorted(set(BlockList))
-    BlockListExtendedSorted = sorted(set(BlockListExtended))
+    block_list_sorted = sorted(set(block_list))
+    block_list_extended_sorted = sorted(set(block_list_extended))
 
-    logging.info("Generated the Blocklist containing %s domains" % len(BlockListSorted))
-    logging.info("Generated the Extended Blocklist containing %s domains" % len(BlockListExtendedSorted))
+    logging.info("Generated the Blocklist containing %s domains" % len(block_list_sorted))
+    logging.info("Generated the Extended Blocklist containing %s domains" % len(block_list_extended_sorted))
 
     banner = "# \n" \
              "# Phishing Army | The Blocklist to filter Phishing \n" \
@@ -301,17 +301,17 @@ def main():
              "# ======================================================================================================\n" % datetime.utcnow().strftime(
         "%a, %d %b %Y %H:%M:%S UTC")
 
-    bannerextended = "# \n" \
-                     "# Phishing Army | The Blocklist to filter Phishing \n" \
-                     "# \n" \
-                     "# Last Update: %s\n" \
-                     "# \n" \
-                     "# This is the extended version, also contains domains without subdomains.\n" \
-                     "# \n" \
-                     "# Project website: https://phishing.army \n" \
-                     "# \n" \
-                     "# This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License. \n" \
-                     "# ======================================================================================================\n" % datetime.utcnow().strftime(
+    banner_extended = "# \n" \
+                      "# Phishing Army | The Blocklist to filter Phishing \n" \
+                      "# \n" \
+                      "# Last Update: %s\n" \
+                      "# \n" \
+                      "# This is the extended version, also contains domains without subdomains.\n" \
+                      "# \n" \
+                      "# Project website: https://phishing.army \n" \
+                      "# \n" \
+                      "# This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License. \n" \
+                      "# ======================================================================================================\n" % datetime.utcnow().strftime(
         "%a, %d %b %Y %H:%M:%S UTC")
 
     # Procedo a scrivere il contenuto
@@ -319,14 +319,14 @@ def main():
 
         f.write("%s\n" % banner)
 
-        for item in BlockListSorted:
+        for item in block_list_sorted:
             f.write("%s\n" % item)
 
     with open(Config.outputdirectory + "phishing_army_blocklist_extended.txt", "w") as f:
 
-        f.write("%s\n" % bannerextended)
+        f.write("%s\n" % banner_extended)
 
-        for item in BlockListExtendedSorted:
+        for item in block_list_extended_sorted:
             f.write("%s\n" % item)
 
 
