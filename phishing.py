@@ -55,8 +55,8 @@ def phishtank():
         if data:
             for each in data:
                 url = each["url"].lower()
-                url = url.rstrip()
                 if url:
+                    url = url.rstrip()
                     registered_domain = tldcache(url).registered_domain
                     sub_domain = tldcache(url).subdomain
                     if sub_domain:
@@ -80,8 +80,8 @@ def openphish():
 
         if r.status_code == 200:
             for line in r.iter_lines(decode_unicode=True):
-                line = line.rstrip()
                 if line:
+                    line = line.rstrip()
                     url = line.lower()
 
                     registered_domain = tldcache(url).registered_domain
@@ -121,8 +121,8 @@ def phishfindr():
 
             if r.status_code == 200:
                 for line in r.iter_lines(decode_unicode=True):
-                    line = line.rstrip()
                     if line:
+                        line = line.rstrip()
                         url = line.lower()
 
                         registered_domain = tldcache(url).registered_domain
@@ -153,8 +153,8 @@ def certpl():
 
         if r.status_code == 200:
             for line in r.iter_lines(decode_unicode=True):
-                line = line.rstrip()
                 if line:
+                    line = line.rstrip()
                     url = line.lower()
 
                     registered_domain = tldcache(url).registered_domain
@@ -210,8 +210,8 @@ def phishuntio():
 
             if r.status_code == 200:
                 for line in r.iter_lines(decode_unicode=True):
-                    line = line.rstrip()
                     if line:
+                        line = line.rstrip()
                         url = line.lower()
 
                         registered_domain = tldcache(url).registered_domain
@@ -241,8 +241,8 @@ def whitelist():
 
         if r.status_code == 200:
             for line in r.iter_lines(decode_unicode=True):
-                line = line.rstrip()
                 if line:
+                    line = line.rstrip()
                     line = line.lower()
                     analyzed_domain = tldcache(line).registered_domain
                     if analyzed_domain:
@@ -257,7 +257,6 @@ def whitelist():
 
         if r.status_code == 200:
             for line in r.iter_lines(decode_unicode=True):
-                line = line.decode("utf-8")
                 if line:
                     line = line.rstrip()
                     line = line.lower()
@@ -274,7 +273,6 @@ def whitelist():
 
         if r.status_code == 200:
             for line in r.iter_lines(decode_unicode=True):
-                line = line.decode("utf-8")
                 if line:
                     line = line.rstrip()
                     line = line.lower()
