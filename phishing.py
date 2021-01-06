@@ -112,9 +112,6 @@ def phishfindr():
         "https://raw.githubusercontent.com/mitchellkrogza/Phishing.Database/master/phishing-links-NEW-today.txt",
         "https://raw.githubusercontent.com/mitchellkrogza/Phishing.Database/master/phishing-links-ACTIVE.txt"]
 
-    # La seguente lista è stata esclusa poichè troppo ampia da elaborare
-    # https://github.com/mitchellkrogza/Phishing.Database/raw/master/phishing-links-ACTIVE.txt
-
     for urldownload in url_list:
         try:
             r = requests.get(urldownload, headers=headerdesktop, timeout=timeoutconnection)
@@ -201,13 +198,11 @@ def phishuntio():
         "https://phishunt.io/static/logs/suspicious_wellsfargo.log"
     ]
 
-    # La seguente lista è stata esclusa poichè troppo ampia da elaborare
-    # https://github.com/mitchellkrogza/Phishing.Database/raw/master/phishing-links-ACTIVE.txt
-
     for urldownload in url_list:
         try:
             r = requests.get(urldownload, headers=headerdesktop, timeout=timeoutconnection)
-
+            # Manually set the response encoding
+            r.encoding = "utf-8"
             if r.status_code == 200:
                 for line in r.iter_lines(decode_unicode=True):
                     if line:
