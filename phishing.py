@@ -330,7 +330,7 @@ def main():
     certpl()
 
     # Phishunt.io loading
-    phishuntio()
+    # phishuntio()
 
     # Eliminate duplicates and sort the generated lists
     block_list_sorted = sorted(set(block_list))
