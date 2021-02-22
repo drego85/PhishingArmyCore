@@ -23,7 +23,7 @@ headerdesktop = {"User-Agent": "Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6
 headerphishtank = {"User-Agent": "Phishtank/phishingarmy",
                    "Accept-Language": "it,en-US;q=0.7,en;q=0.3"}
 
-tldcache = tldextract.TLDExtract(cache_file="./.tld_set")
+tldcache = tldextract.TLDExtract()
 
 white_list = []
 block_list = []
