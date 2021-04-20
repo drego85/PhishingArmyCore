@@ -175,57 +175,34 @@ def certpl():
 
 # Download data from Phishunt.io
 def phishuntio():
-    url_list = [
-        "https://phishunt.io/static/logs/suspicious_amazon.log",
-        "https://phishunt.io/static/logs/suspicious_apple.log",
-        "https://phishunt.io/static/logs/suspicious_dropbox.log",
-        "https://phishunt.io/static/logs/suspicious_facebook.log",
-        "https://phishunt.io/static/logs/suspicious_google.log",
-        "https://phishunt.io/static/logs/suspicious_instagram.log",
-        "https://phishunt.io/static/logs/suspicious_linkedin.log",
-        "https://phishunt.io/static/logs/suspicious_microsoft.log",
-        "https://phishunt.io/static/logs/suspicious_netflix.log",
-        "https://phishunt.io/static/logs/suspicious_paypal.log",
-        "https://phishunt.io/static/logs/suspicious_spotify.log",
-        "https://phishunt.io/static/logs/suspicious_steam.log",
-        "https://phishunt.io/static/logs/suspicious_twitter.log",
-        "https://phishunt.io/static/logs/suspicious_santander.log",
-        "https://phishunt.io/static/logs/suspicious_bankofamerica.log",
-        "https://phishunt.io/static/logs/suspicious_barclays.log",
-        "https://phishunt.io/static/logs/suspicious_bbva.log",
-        "https://phishunt.io/static/logs/suspicious_bcp.log",
-        "https://phishunt.io/static/logs/suspicious_itau.log",
-        "https://phishunt.io/static/logs/suspicious_wellsfargo.log"
-    ]
+    urldownload = "https://phishunt.io/feed.txt"
 
-    for urldownload in url_list:
-        try:
-            r = requests.get(urldownload, headers=headerdesktop, timeout=timeoutconnection)
-            # Manually set the response encoding
-            r.encoding = "utf-8"
-            if r.status_code == 200:
-                for line in r.iter_lines(decode_unicode=True):
-                    if line:
-                        line = line.rstrip()
-                        url = line.lower()
+    try:
+        r = requests.get(urldownload, headers=headerdesktop, timeout=timeoutconnection)
 
-                        registered_domain = tldcache(url).registered_domain
-                        sub_domain = tldcache(url).subdomain
+        if r.status_code == 200:
+            for line in r.iter_lines(decode_unicode=True):
+                if line:
+                    line = line.rstrip()
+                    url = line.lower()
 
-                        if sub_domain:
-                            full_domain = sub_domain + "." + registered_domain
-                        else:
-                            full_domain = registered_domain
+                    registered_domain = tldcache(url).registered_domain
+                    sub_domain = tldcache(url).subdomain
 
-                        if registered_domain and registered_domain not in white_list:
-                            block_list.append(full_domain)
-                            block_list_extended.append(full_domain)
-                            if full_domain != registered_domain:
-                                block_list_extended.append(registered_domain)
+                    if sub_domain:
+                        full_domain = sub_domain + "." + registered_domain
+                    else:
+                        full_domain = registered_domain
 
-        except Exception as e:
-            logging.error(e, exc_info=True)
-            raise
+                    if registered_domain and registered_domain not in white_list:
+                        block_list.append(full_domain)
+                        block_list_extended.append(full_domain)
+                        if full_domain != registered_domain:
+                            block_list_extended.append(registered_domain)
+
+    except Exception as e:
+        logging.error(e, exc_info=True)
+        raise
 
 
 # Load WhiteList
@@ -280,6 +257,7 @@ def whitelist():
 
     try:
         # Source https://s3.amazonaws.com/alexa-static/top-1m.csv.zip
+        # gcut -d "," -f1 --complement top-1m.csv > alexa-top-1m.txt
         f = open("./list/alexa-top-1m.txt", "r")
 
         for line in f:
@@ -302,9 +280,10 @@ def whitelist():
             if line:
                 line = line.rstrip()
                 line = line.lower()
-                analyzed_domain = tldcache(line).registered_domain
-                if analyzed_domain:
-                    white_list.append(analyzed_domain)
+                if not line.startswith("#"):
+                    analyzed_domain = tldcache(line).registered_domain
+                    if analyzed_domain:
+                        white_list.append(analyzed_domain)
         f.close()
 
     except Exception as e:
@@ -330,7 +309,7 @@ def main():
     certpl()
 
     # Phishunt.io loading
-    # phishuntio()
+    phishuntio()
 
     # Eliminate duplicates and sort the generated lists
     block_list_sorted = sorted(set(block_list))
