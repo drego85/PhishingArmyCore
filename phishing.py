@@ -16,12 +16,12 @@ import requests
 import tldextract
 from datetime import datetime
 
-timeoutconnection = 120
-headerdesktop = {"User-Agent": "Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; WOW64; Trident/6.0)",
-                 "Accept-Language": "it,en-US;q=0.7,en;q=0.3"}
+timeout_connection = 120
+header_desktop = {"User-Agent": "Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; WOW64; Trident/6.0)",
+                  "Accept-Language": "it,en-US;q=0.7,en;q=0.3"}
 
-headerphishtank = {"User-Agent": "Phishtank/phishingarmy",
-                   "Accept-Language": "it,en-US;q=0.7,en;q=0.3"}
+header_phishtank = {"User-Agent": "Phishtank/phishingarmy",
+                    "Accept-Language": "it,en-US;q=0.7,en;q=0.3"}
 
 tldcache = tldextract.TLDExtract()
 
@@ -37,9 +37,9 @@ logging.basicConfig(filename="phishing.log",
 
 # Download data from phishtank.com
 def phishtank():
-    urldownload = "https://data.phishtank.com/data/" + Config.phishtanktoken + "online-valid.json.gz"
+    url_download = "https://data.phishtank.com/data/" + Config.phishtanktoken + "/online-valid.json.gz"
 
-    r = requests.get(urldownload, headers=headerdesktop, timeout=timeoutconnection)
+    r = requests.get(url_download, headers=header_phishtank, timeout=timeout_connection)
 
     if r.status_code == 200:
 
@@ -73,10 +73,10 @@ def phishtank():
 
 # Download data from OpenPhishing.com
 def openphish():
-    urldownload = "https://openphish.com/feed.txt"
+    url_download = "https://openphish.com/feed.txt"
 
     try:
-        r = requests.get(urldownload, headers=headerdesktop, timeout=timeoutconnection)
+        r = requests.get(url_download, headers=header_desktop, timeout=timeout_connection)
 
         if r.status_code == 200:
             for line in r.iter_lines(decode_unicode=True):
@@ -112,9 +112,9 @@ def phishfindr():
         "https://raw.githubusercontent.com/mitchellkrogza/Phishing.Database/master/phishing-links-NEW-today.txt",
         "https://raw.githubusercontent.com/mitchellkrogza/Phishing.Database/master/phishing-links-ACTIVE.txt"]
 
-    for urldownload in url_list:
+    for url_download in url_list:
         try:
-            r = requests.get(urldownload, headers=headerdesktop, timeout=timeoutconnection)
+            r = requests.get(url_download, headers=header_desktop, timeout=timeout_connection)
 
             if r.status_code == 200:
                 for line in r.iter_lines(decode_unicode=True):
@@ -143,10 +143,10 @@ def phishfindr():
 
 # Download data from Cert.pl
 def certpl():
-    urldownload = "https://hole.cert.pl/domains/domains.txt"
+    url_download = "https://hole.cert.pl/domains/domains.txt"
 
     try:
-        r = requests.get(urldownload, headers=headerdesktop, timeout=timeoutconnection)
+        r = requests.get(url_download, headers=header_desktop, timeout=timeout_connection)
 
         if r.status_code == 200:
             for line in r.iter_lines(decode_unicode=True):
@@ -175,10 +175,10 @@ def certpl():
 
 # Download data from Phishunt.io
 def phishuntio():
-    urldownload = "https://phishunt.io/feed.txt"
+    url_download = "https://phishunt.io/feed.txt"
 
     try:
-        r = requests.get(urldownload, headers=headerdesktop, timeout=timeoutconnection)
+        r = requests.get(url_download, headers=header_desktop, timeout=timeout_connection)
 
         if r.status_code == 200:
             for line in r.iter_lines(decode_unicode=True):
@@ -207,9 +207,15 @@ def phishuntio():
 
 # Load WhiteList
 def whitelist():
+    # Set Global the Whitelist
+    global white_list
+
+    # List of whitelisted domain
+    white_list = []
+
     try:
-        urldownload = "https://raw.githubusercontent.com/anudeepND/whitelist/master/domains/whitelist.txt"
-        r = requests.get(urldownload, headers=headerdesktop, timeout=timeoutconnection)
+        url_download = "https://raw.githubusercontent.com/anudeepND/whitelist/master/domains/whitelist.txt"
+        r = requests.get(url_download, headers=header_desktop, timeout=timeout_connection)
 
         if r.status_code == 200:
             for line in r.iter_lines(decode_unicode=True):
@@ -224,8 +230,8 @@ def whitelist():
         pass
 
     try:
-        urldownload = "https://raw.githubusercontent.com/anudeepND/whitelist/master/domains/referral-sites.txt"
-        r = requests.get(urldownload, headers=headerdesktop, timeout=timeoutconnection)
+        url_download = "https://raw.githubusercontent.com/anudeepND/whitelist/master/domains/referral-sites.txt"
+        r = requests.get(url_download, headers=header_desktop, timeout=timeout_connection)
 
         if r.status_code == 200:
             for line in r.iter_lines(decode_unicode=True):
@@ -240,8 +246,8 @@ def whitelist():
         pass
 
     try:
-        urldownload = "https://raw.githubusercontent.com/anudeepND/whitelist/master/domains/optional-list.txt"
-        r = requests.get(urldownload, headers=headerdesktop, timeout=timeoutconnection)
+        url_download = "https://raw.githubusercontent.com/anudeepND/whitelist/master/domains/optional-list.txt"
+        r = requests.get(url_download, headers=header_desktop, timeout=timeout_connection)
 
         if r.status_code == 200:
             for line in r.iter_lines(decode_unicode=True):
@@ -289,6 +295,10 @@ def whitelist():
     except Exception as e:
         logging.error(e, exc_info=True)
         pass
+
+    # Remove duplicate from list
+    if white_list:
+        white_list = list(set(white_list))
 
 
 def main():
