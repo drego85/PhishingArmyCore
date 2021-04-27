@@ -25,7 +25,6 @@ header_phishtank = {"User-Agent": "Phishtank/phishingarmy",
 
 tldcache = tldextract.TLDExtract()
 
-white_list = []
 block_list = []
 block_list_extended = []
 
