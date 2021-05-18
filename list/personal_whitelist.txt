@@ -198,3 +198,5 @@ vercel.app
 elementfx.com
 accorcia.to
 klclick1.com
+paypal-communication.com
+gebuhrenfrei.com
