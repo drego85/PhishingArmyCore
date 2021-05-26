@@ -359,6 +359,9 @@ def main():
     # Phishunt.io loading
     phishuntio()
 
+    # Urlscan.io loading
+    urlscanio()
+
     # Eliminate duplicates and sort the generated lists
     block_list_sorted = sorted(set(block_list))
     block_list_extended_sorted = sorted(set(block_list_extended))
