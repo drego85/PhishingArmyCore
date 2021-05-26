@@ -38,36 +38,75 @@ logging.basicConfig(filename="phishing.log",
 def phishtank():
     url_download = "https://data.phishtank.com/data/" + Config.phishtanktoken + "/online-valid.json.gz"
 
-    r = requests.get(url_download, headers=header_phishtank, timeout=timeout_connection)
+    try:
+        r = requests.get(url_download, headers=header_phishtank, timeout=timeout_connection)
 
-    if r.status_code == 200:
+        if r.status_code == 200:
 
-        with open("./list/online-valid.json.gz", "wb") as f:
-            f.write(r.content)
+            with open("./list/online-valid.json.gz", "wb") as f:
+                f.write(r.content)
 
-        f = gzip.open("./list/online-valid.json.gz", "rb")
-        file_content = f.read()
-        f.close()
+            f = gzip.open("./list/online-valid.json.gz", "rb")
+            file_content = f.read()
+            f.close()
 
-        data = json.loads(file_content)
+            data = json.loads(file_content)
 
-        if data:
-            for each in data:
-                url = each["url"].lower()
-                if url:
-                    url = url.rstrip()
-                    registered_domain = tldcache(url).registered_domain
-                    sub_domain = tldcache(url).subdomain
-                    if sub_domain:
-                        full_domain = sub_domain + "." + registered_domain
-                    else:
-                        full_domain = registered_domain
+            if data:
+                for each in data:
+                    url = each["url"].lower()
+                    if url:
+                        url = url.rstrip()
+                        registered_domain = tldcache(url).registered_domain
+                        sub_domain = tldcache(url).subdomain
 
-                    if registered_domain and registered_domain not in white_list:
-                        block_list.append(full_domain)
-                        block_list_extended.append(full_domain)
-                        if full_domain != registered_domain:
-                            block_list_extended.append(registered_domain)
+                        if sub_domain:
+                            full_domain = sub_domain + "." + registered_domain
+                        else:
+                            full_domain = registered_domain
+
+                        if registered_domain and registered_domain not in white_list:
+                            block_list.append(full_domain)
+                            block_list_extended.append(full_domain)
+                            if full_domain != registered_domain:
+                                block_list_extended.append(registered_domain)
+    except Exception as e:
+        logging.error(e, exc_info=True)
+        raise
+
+
+# Download data from Urlscan.io
+def urlscanio():
+    url_download = "https://urlscan.io/api/v1/search/?q=task.source:twitter_illegalFawn"
+
+    try:
+        r = requests.get(url_download, headers=header_desktop, timeout=timeout_connection)
+
+        if r.status_code == 200:
+
+            data = json.loads(r.text)
+
+            if data:
+                for each in data["results"]:
+                    domain = each["task"]["domain"].lower()
+                    if domain:
+                        registered_domain = tldcache(domain).registered_domain
+                        sub_domain = tldcache(domain).subdomain
+
+                        if sub_domain:
+                            full_domain = sub_domain + "." + registered_domain
+                        else:
+                            full_domain = registered_domain
+
+                        if registered_domain and registered_domain not in white_list:
+                            block_list.append(full_domain)
+                            block_list_extended.append(full_domain)
+                            if full_domain != registered_domain:
+                                block_list_extended.append(registered_domain)
+
+    except Exception as e:
+        logging.error(e, exc_info=True)
+        raise
 
 
 # Download data from OpenPhishing.com
@@ -151,10 +190,10 @@ def certpl():
             for line in r.iter_lines(decode_unicode=True):
                 if line:
                     line = line.rstrip()
-                    url = line.lower()
+                    domain = line.lower()
 
-                    registered_domain = tldcache(url).registered_domain
-                    sub_domain = tldcache(url).subdomain
+                    registered_domain = tldcache(domain).registered_domain
+                    sub_domain = tldcache(domain).subdomain
 
                     if sub_domain:
                         full_domain = sub_domain + "." + registered_domain
