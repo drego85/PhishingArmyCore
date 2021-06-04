@@ -251,72 +251,23 @@ def whitelist():
     # List of whitelisted domain
     white_list = []
 
+    # Load Gobal Whitelist
     try:
-        url_download = "https://raw.githubusercontent.com/anudeepND/whitelist/master/domains/whitelist.txt"
-        r = requests.get(url_download, headers=header_desktop, timeout=timeout_connection)
-
-        if r.status_code == 200:
-            for line in r.iter_lines(decode_unicode=True):
-                if line:
-                    line = line.rstrip()
-                    line = line.lower()
-                    analyzed_domain = tldcache(line).registered_domain
-                    if analyzed_domain:
-                        white_list.append(analyzed_domain.lower())
-    except Exception as e:
-        logging.error(e, exc_info=True)
-        pass
-
-    try:
-        url_download = "https://raw.githubusercontent.com/anudeepND/whitelist/master/domains/referral-sites.txt"
-        r = requests.get(url_download, headers=header_desktop, timeout=timeout_connection)
-
-        if r.status_code == 200:
-            for line in r.iter_lines(decode_unicode=True):
-                if line:
-                    line = line.rstrip()
-                    line = line.lower()
-                    analyzed_domain = tldcache(line).registered_domain
-                    if analyzed_domain:
-                        white_list.append(analyzed_domain.lower())
-    except Exception as e:
-        logging.error(e, exc_info=True)
-        pass
-
-    try:
-        url_download = "https://raw.githubusercontent.com/anudeepND/whitelist/master/domains/optional-list.txt"
-        r = requests.get(url_download, headers=header_desktop, timeout=timeout_connection)
-
-        if r.status_code == 200:
-            for line in r.iter_lines(decode_unicode=True):
-                if line:
-                    line = line.rstrip()
-                    line = line.lower()
-                    analyzed_domain = tldcache(line).registered_domain
-                    if analyzed_domain:
-                        white_list.append(analyzed_domain.lower())
-    except Exception as e:
-        logging.error(e, exc_info=True)
-        pass
-
-    try:
-        # Source https://s3.amazonaws.com/alexa-static/top-1m.csv.zip
-        # gcut -d "," -f1 --complement top-1m.csv > alexa-top-1m.txt
-        f = open("./list/alexa-top-1m.txt", "r")
+        f = open("./list/global_whitelist.txt", "r")
 
         for line in f:
             if line:
                 line = line.rstrip()
                 line = line.lower()
-                analyzed_domain = tldcache(line).registered_domain
-                if analyzed_domain:
-                    white_list.append(analyzed_domain)
+                if not line.startswith("#"):
+                    white_list.append(line)
         f.close()
 
     except Exception as e:
         logging.error(e, exc_info=True)
         pass
 
+    # Load Personal Whitelist
     try:
         f = open("./list/personal_whitelist.txt", "r")
 
@@ -325,18 +276,12 @@ def whitelist():
                 line = line.rstrip()
                 line = line.lower()
                 if not line.startswith("#"):
-                    analyzed_domain = tldcache(line).registered_domain
-                    if analyzed_domain:
-                        white_list.append(analyzed_domain)
+                    white_list.append(line)
         f.close()
 
     except Exception as e:
         logging.error(e, exc_info=True)
         pass
-
-    # Remove duplicate from list
-    if white_list:
-        white_list = list(set(white_list))
 
 
 def main():
