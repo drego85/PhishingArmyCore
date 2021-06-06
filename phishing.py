@@ -243,6 +243,38 @@ def phishuntio():
         raise
 
 
+# Download data from Phishunt.io
+def orcapet():
+    url_download = "https://orca.pet/notonmyshift/domains.txt"
+
+    try:
+        r = requests.get(url_download, headers=header_desktop, timeout=timeout_connection)
+
+        if r.status_code == 200:
+            for line in r.iter_lines(decode_unicode=True):
+                if not line.startswith("#"):
+                    line = line.rstrip()
+                    url = line.lower()
+
+                    registered_domain = tldcache(url).registered_domain
+                    sub_domain = tldcache(url).subdomain
+
+                    if sub_domain:
+                        full_domain = sub_domain + "." + registered_domain
+                    else:
+                        full_domain = registered_domain
+
+                    if registered_domain and registered_domain not in white_list:
+                        block_list.append(full_domain)
+                        block_list_extended.append(full_domain)
+                        if full_domain != registered_domain:
+                            block_list_extended.append(registered_domain)
+
+    except Exception as e:
+        logging.error(e, exc_info=True)
+        raise
+
+
 # Load WhiteList
 def whitelist():
     # Set Global the Whitelist
@@ -306,6 +338,9 @@ def main():
 
     # Urlscan.io loading
     urlscanio()
+
+    # Orcapet loading
+    orcapet()
 
     # Eliminate duplicates and sort the generated lists
     block_list_sorted = sorted(set(block_list))
