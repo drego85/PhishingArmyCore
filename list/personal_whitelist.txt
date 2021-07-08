@@ -20,3 +20,7 @@ pardot.com
 seohost.com.pl
 seohost.pl
 eurosklep.eu
+flow.page
+
+# sosafe.de phshing simulation
+com-s02.net
