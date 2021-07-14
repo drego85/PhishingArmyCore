@@ -21,6 +21,8 @@ seohost.com.pl
 seohost.pl
 eurosklep.eu
 flow.page
+submit-form.com
+formspark.io
 
 # sosafe.de phshing simulation
 com-s02.net
