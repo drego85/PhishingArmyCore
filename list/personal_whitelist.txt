@@ -23,6 +23,12 @@ eurosklep.eu
 flow.page
 submit-form.com
 formspark.io
+pocztowy24.pl
+stevenaleong.com
+britishgas.co.uk
+itsnoahevans.co.uk
+dmcc.com.au
+j.mp
 
 # sosafe.de phshing simulation
 com-s02.net
