@@ -34,6 +34,32 @@ logging.basicConfig(filename="phishing.log",
                     level=logging.INFO)
 
 
+def parse_domain(url):
+    registered_domain = tldcache(url).registered_domain
+
+    # Remove punycode domain
+    registered_domain = registered_domain.encode("idna").decode("utf-8")
+
+    sub_domain = tldcache(url).subdomain
+
+    if sub_domain:
+        full_domain = sub_domain + "." + registered_domain
+    else:
+        full_domain = registered_domain
+
+    if registered_domain and registered_domain not in white_list:
+        block_list.append(full_domain)
+        block_list_extended.append(full_domain)
+
+        if sub_domain == "www":
+            block_list_extended.append(registered_domain)
+
+        # This integration has been suspended to avoid false positives.
+        #
+        # if full_domain != registered_domain:
+        #    block_list_extended.append(registered_domain)
+
+
 # Download data from phishtank.com
 def phishtank():
     url_download = "https://data.phishtank.com/data/" + Config.phishtanktoken + "/online-valid.json.gz"
@@ -54,22 +80,11 @@ def phishtank():
 
             if data:
                 for each in data:
-                    url = each["url"].lower()
+                    url = each["url"]
                     if url:
-                        url = url.rstrip()
-                        registered_domain = tldcache(url).registered_domain
-                        sub_domain = tldcache(url).subdomain
+                        url = url.strip()
+                        parse_domain(url)
 
-                        if sub_domain:
-                            full_domain = sub_domain + "." + registered_domain
-                        else:
-                            full_domain = registered_domain
-
-                        if registered_domain and registered_domain not in white_list:
-                            block_list.append(full_domain)
-                            block_list_extended.append(full_domain)
-                            if full_domain != registered_domain:
-                                block_list_extended.append(registered_domain)
     except Exception as e:
         logging.error(e, exc_info=True)
         raise
@@ -88,21 +103,10 @@ def urlscanio():
 
             if data:
                 for each in data["results"]:
-                    domain = each["task"]["domain"].lower()
-                    if domain:
-                        registered_domain = tldcache(domain).registered_domain
-                        sub_domain = tldcache(domain).subdomain
-
-                        if sub_domain:
-                            full_domain = sub_domain + "." + registered_domain
-                        else:
-                            full_domain = registered_domain
-
-                        if registered_domain and registered_domain not in white_list:
-                            block_list.append(full_domain)
-                            block_list_extended.append(full_domain)
-                            if full_domain != registered_domain:
-                                block_list_extended.append(registered_domain)
+                    url = each["task"]["url"].lower()
+                    if url:
+                        url = url.strip()
+                        parse_domain(url)
 
     except Exception as e:
         logging.error(e, exc_info=True)
@@ -119,22 +123,8 @@ def openphish():
         if r.status_code == 200:
             for line in r.iter_lines(decode_unicode=True):
                 if line:
-                    line = line.rstrip()
-                    url = line.lower()
-
-                    registered_domain = tldcache(url).registered_domain
-                    sub_domain = tldcache(url).subdomain
-
-                    if sub_domain:
-                        full_domain = sub_domain + "." + registered_domain
-                    else:
-                        full_domain = registered_domain
-
-                    if registered_domain and registered_domain not in white_list:
-                        block_list.append(full_domain)
-                        block_list_extended.append(full_domain)
-                        if full_domain != registered_domain:
-                            block_list_extended.append(registered_domain)
+                    url = line.strip()
+                    parse_domain(url)
 
     except Exception as e:
         logging.error(e, exc_info=True)
@@ -157,22 +147,8 @@ def phishfindr():
             if r.status_code == 200:
                 for line in r.iter_lines(decode_unicode=True):
                     if line:
-                        line = line.rstrip()
-                        url = line.lower()
-
-                        registered_domain = tldcache(url).registered_domain
-                        sub_domain = tldcache(url).subdomain
-
-                        if sub_domain:
-                            full_domain = sub_domain + "." + registered_domain
-                        else:
-                            full_domain = registered_domain
-
-                        if registered_domain and registered_domain not in white_list:
-                            block_list.append(full_domain)
-                            block_list_extended.append(full_domain)
-                            if full_domain != registered_domain:
-                                block_list_extended.append(registered_domain)
+                        url = line.strip()
+                        parse_domain(url)
 
         except Exception as e:
             logging.error(e, exc_info=True)
@@ -189,22 +165,8 @@ def certpl():
         if r.status_code == 200:
             for line in r.iter_lines(decode_unicode=True):
                 if line:
-                    line = line.rstrip()
-                    domain = line.lower()
-
-                    registered_domain = tldcache(domain).registered_domain
-                    sub_domain = tldcache(domain).subdomain
-
-                    if sub_domain:
-                        full_domain = sub_domain + "." + registered_domain
-                    else:
-                        full_domain = registered_domain
-
-                    if registered_domain and registered_domain not in white_list:
-                        block_list.append(full_domain)
-                        block_list_extended.append(full_domain)
-                        if full_domain != registered_domain:
-                            block_list_extended.append(registered_domain)
+                    url = line.strip()
+                    parse_domain(url)
 
     except Exception as e:
         logging.error(e, exc_info=True)
@@ -221,22 +183,8 @@ def phishuntio():
         if r.status_code == 200:
             for line in r.iter_lines(decode_unicode=True):
                 if line:
-                    line = line.rstrip()
-                    url = line.lower()
-
-                    registered_domain = tldcache(url).registered_domain
-                    sub_domain = tldcache(url).subdomain
-
-                    if sub_domain:
-                        full_domain = sub_domain + "." + registered_domain
-                    else:
-                        full_domain = registered_domain
-
-                    if registered_domain and registered_domain not in white_list:
-                        block_list.append(full_domain)
-                        block_list_extended.append(full_domain)
-                        if full_domain != registered_domain:
-                            block_list_extended.append(registered_domain)
+                    url = line.strip()
+                    parse_domain(url)
 
     except Exception as e:
         logging.error(e, exc_info=True)
@@ -257,7 +205,7 @@ def whitelist():
 
         for line in f:
             if line:
-                line = line.rstrip()
+                line = line.strip()
                 line = line.lower()
                 if not line.startswith("#"):
                     white_list.append(line)
@@ -273,7 +221,7 @@ def whitelist():
 
         for line in f:
             if line:
-                line = line.rstrip()
+                line = line.strip()
                 line = line.lower()
                 if not line.startswith("#"):
                     white_list.append(line)
@@ -320,6 +268,7 @@ def main():
              "# Last Update: %s\n" \
              "# \n" \
              "# Project website: https://phishing.army \n" \
+             "# Support the project with a donation:: https://www.buymeacoffee.com/andreadraghetti \n" \
              "# \n" \
              "# This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License. \n" \
              "# ======================================================================================================\n" % datetime.utcnow().strftime(
@@ -333,12 +282,13 @@ def main():
                       "# This is the extended version, also contains domains without subdomains.\n" \
                       "# \n" \
                       "# Project website: https://phishing.army \n" \
+                      "# Support the project with a donation:: https://www.buymeacoffee.com/andreadraghetti \n" \
                       "# \n" \
                       "# This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License. \n" \
                       "# ======================================================================================================\n" % datetime.utcnow().strftime(
         "%a, %d %b %Y %H:%M:%S UTC")
 
-    # Procedo a scrivere il contenuto
+    # Write the blocklist files
     with open(Config.outputdirectory + "phishing_army_blocklist.txt", "w") as f:
 
         f.write("%s\n" % banner)
