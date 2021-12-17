@@ -29,6 +29,11 @@ britishgas.co.uk
 itsnoahevans.co.uk
 dmcc.com.au
 j.mp
+nppa.com.au
+windows.us
+edgekey.net
+sparkasse-mittelthueringen.de
+google.ml
 
-# sosafe.de phshing simulation
+# sosafe.de phishing simulation
 com-s02.net
