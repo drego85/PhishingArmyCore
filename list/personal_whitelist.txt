@@ -30,6 +30,8 @@ windows.us
 edgekey.net
 sparkasse-mittelthueringen.de
 google.ml
+nflxvideo.net
+
 
 # sosafe.de phishing simulation
 com-s02.net
@@ -686,3 +688,4 @@ zxq.net
 zyva.org
 zz.gd
 zzb.bz
+tiny.one
