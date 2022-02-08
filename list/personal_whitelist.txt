@@ -32,7 +32,7 @@ sparkasse-mittelthueringen.de
 google.ml
 nflxvideo.net
 linkr.bio
-
+docsend.com
 
 # sosafe.de phishing simulation
 com-s02.net
