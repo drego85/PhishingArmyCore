@@ -32,7 +32,11 @@ sparkasse-mittelthueringen.de
 google.ml
 nflxvideo.net
 linkr.bio
+wasabisys.com
+
+# Official DropBox domains reported by Weishen Mead
 docsend.com
+hellosign.com
 
 # sosafe.de phishing simulation
 com-s02.net
@@ -690,3 +694,5 @@ zyva.org
 zz.gd
 zzb.bz
 tiny.one
+xevil.us
+cut.ly
