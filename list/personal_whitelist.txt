@@ -696,3 +696,4 @@ zzb.bz
 tiny.one
 xevil.us
 cut.ly
+vo.la
