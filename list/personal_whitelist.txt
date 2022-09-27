@@ -33,6 +33,7 @@ google.ml
 nflxvideo.net
 linkr.bio
 wasabisys.com
+opence.fr
 
 # Official DropBox domains reported by Weishen Mead
 docsend.com
@@ -40,6 +41,7 @@ hellosign.com
 
 # sosafe.de phishing simulation
 com-s02.net
+
 
 # List of short url service
 # In part they come from: https://github.com/sambokai/ShortURL-Services-List
@@ -697,3 +699,4 @@ tiny.one
 xevil.us
 cut.ly
 vo.la
+unyku.id
