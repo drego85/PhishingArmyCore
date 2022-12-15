@@ -703,3 +703,4 @@ cut.ly
 vo.la
 unyku.id
 uclck.ru
+shorturl.at
