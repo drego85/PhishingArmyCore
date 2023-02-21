@@ -37,6 +37,8 @@ opence.fr
 takarekbank.hu
 user.fm
 noscript.net
+cexpr.es
+myportfolio.com
 
 # Official DropBox domains reported by Weishen Mead
 docsend.com
@@ -706,3 +708,5 @@ unyku.id
 uclck.ru
 shorturl.at
 gat.to
+mub.me
+hopp.to
