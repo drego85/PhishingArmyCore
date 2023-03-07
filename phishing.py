@@ -92,25 +92,28 @@ def phishtank():
 
 # Download data from Urlscan.io
 def urlscanio():
-    url_download = "https://urlscan.io/api/v1/search/?q=task.source:twitter_illegalFawn"
+    url_download = ["https://urlscan.io/api/v1/search/?q=task.tags:%22@phish_report%22",
+                    "https://urlscan.io/api/v1/search/?q=task.tags:%22sinking-yachts%22",
+                    "https://urlscan.io/api/v1/search/?q=task.tags:%22%23phishing%22"]
 
-    try:
-        r = requests.get(url_download, headers=header_desktop, timeout=timeout_connection)
+    for url in url_download:
+        try:
+            r = requests.get(url, headers=header_desktop, timeout=timeout_connection)
 
-        if r.status_code == 200:
+            if r.status_code == 200:
 
-            data = json.loads(r.text)
+                data = json.loads(r.text)
 
-            if data:
-                for each in data["results"]:
-                    url = each["task"]["url"].lower()
-                    if url:
-                        url = url.strip()
-                        parse_domain(url)
+                if data:
+                    for each in data["results"]:
+                        url = each["task"]["url"].lower()
+                        if url:
+                            url = url.strip()
+                            parse_domain(url)
 
-    except Exception as e:
-        logging.error(e, exc_info=True)
-        raise
+        except Exception as e:
+            logging.error(e, exc_info=True)
+            raise
 
 
 # Download data from OpenPhishing.com
