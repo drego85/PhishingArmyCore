@@ -20,7 +20,7 @@ timeout_connection = 120
 header_desktop = {"User-Agent": "Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; WOW64; Trident/6.0)",
                   "Accept-Language": "it,en-US;q=0.7,en;q=0.3"}
 
-header_phishtank = {"User-Agent": "Phishtank/phishingarmy",
+header_phishtank = {"User-Agent": "phishtank/phishingarmy",
                     "Accept-Language": "it,en-US;q=0.7,en;q=0.3"}
 
 tldcache = tldextract.TLDExtract()
@@ -247,7 +247,7 @@ def main():
     openphish()
 
     # PhishFindR loading
-    phishfindr()
+    # phishfindr()
 
     # Cert.pl loading
     certpl()
