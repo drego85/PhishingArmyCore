@@ -39,6 +39,8 @@ user.fm
 noscript.net
 cexpr.es
 myportfolio.com
+apple-dns.net
+vce.rocks
 
 # Official DropBox domains reported by Weishen Mead
 docsend.com
