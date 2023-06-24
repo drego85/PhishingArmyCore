@@ -92,8 +92,7 @@ def phishtank():
 
 # Download data from Urlscan.io
 def urlscanio():
-    url_download = ["https://urlscan.io/api/v1/search/?q=task.tags:%22@phish_report%22",
-                    "https://urlscan.io/api/v1/search/?q=task.tags:%22sinking-yachts%22",
+    url_download = ["https://urlscan.io/api/v1/search/?q=task.tags:%22sinking-yachts%22",
                     "https://urlscan.io/api/v1/search/?q=task.tags:%22%23phishing%22"]
 
     for url in url_download:
