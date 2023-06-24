@@ -42,6 +42,12 @@ myportfolio.com
 apple-dns.net
 vce.rocks
 
+# Official Proton Domain
+proton.me
+protonapps.com
+protonvpn.com
+protonmail.com
+
 # Official DropBox domains reported by Weishen Mead
 docsend.com
 hellosign.com
