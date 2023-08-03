@@ -41,6 +41,7 @@ cexpr.es
 myportfolio.com
 apple-dns.net
 vce.rocks
+tradehq.com
 
 # Official Proton Domain
 proton.me
@@ -718,3 +719,4 @@ shorturl.at
 gat.to
 mub.me
 hopp.to
+goo.by
