@@ -42,6 +42,8 @@ myportfolio.com
 apple-dns.net
 vce.rocks
 tradehq.com
+craft.do
+craft.me
 
 # Official Proton Domain
 proton.me
