@@ -42,6 +42,8 @@ myportfolio.com
 apple-dns.net
 vce.rocks
 tradehq.com
+
+# Craft Docs
 craft.do
 craft.me
 
@@ -721,4 +723,7 @@ shorturl.at
 gat.to
 mub.me
 hopp.to
+hopp.bio
 goo.by
+wbze.de
+tr.ee
