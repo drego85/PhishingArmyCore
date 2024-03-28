@@ -42,6 +42,7 @@ myportfolio.com
 apple-dns.net
 vce.rocks
 tradehq.com
+gamma.app
 
 # Craft Docs
 craft.do
