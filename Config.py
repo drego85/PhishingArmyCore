@@ -1,0 +1,2 @@
+phishtanktoken = ""
+outputdirectory = "./out/"
