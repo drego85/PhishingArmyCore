@@ -237,27 +237,33 @@ def whitelist():
 def main():
     # Whitelist loading
     whitelist()
-    logging.info("Loading %s domain in white_list" % len(white_list))
+    logging.info("Loading %s domains in white_list" % len(white_list))
 
     # PhishTank loading
+    logging.info("Getting phishtank list")
     phishtank()
 
     # OpenPhish loading
+    logging.info("Getting openphish list")
     openphish()
 
     # PhishFindR loading
     # phishfindr()
 
     # Cert.pl loading
+    logging.info("Getting certpl list")
     certpl()
 
     # Phishunt.io loading
+    logging.info("Getting phishuntio list")
     phishuntio()
 
     # Urlscan.io loading
+    logging.info("Getting urlscanio list")
     urlscanio()
 
     # Eliminate duplicates and sort the generated lists
+    logging.info("Sorting lists")
     block_list_sorted = sorted(set(block_list))
     block_list_extended_sorted = sorted(set(block_list_extended))
 
@@ -304,6 +310,8 @@ def main():
 
         for item in block_list_extended_sorted:
             f.write("%s\n" % item)
+
+    logging.info("Done")
 
 
 if __name__ == "__main__":
