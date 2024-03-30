@@ -71,7 +71,10 @@ def parse_domain(url, source):
 
 # Download data from phishtank.com
 def phishtank():
-    url_download = "https://data.phishtank.com/data/" + Config.phishtanktoken + "/online-valid.json.gz"
+    if Config.phishtanktoken:
+        url_download = "https://data.phishtank.com/data/" + Config.phishtanktoken + "/online-valid.json.gz"
+    else:
+        url_download = "https://data.phishtank.com/data/online-valid.json.gz"
 
     try:
         r = requests.get(url_download, headers=header_phishtank, timeout=timeout_connection)
