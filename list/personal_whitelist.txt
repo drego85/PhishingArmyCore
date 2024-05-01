@@ -43,6 +43,8 @@ apple-dns.net
 vce.rocks
 tradehq.com
 gamma.app
+satsback.com
+
 
 # Craft Docs
 craft.do
