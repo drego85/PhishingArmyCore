@@ -44,7 +44,7 @@ vce.rocks
 tradehq.com
 gamma.app
 satsback.com
-
+afrinic.net
 
 # Craft Docs
 craft.do
