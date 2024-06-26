@@ -65,7 +65,9 @@ com-s02.net
 
 
 # List of short url service
-# In part they come from: https://github.com/sambokai/ShortURL-Services-List
+# In part they come from: 
+# - https://github.com/sambokai/ShortURL-Services-List
+# - https://github.com/PeterDaveHello/url-shorteners
 0rz.tw
 1-url.net
 126.am
@@ -730,3 +732,4 @@ hopp.bio
 goo.by
 wbze.de
 tr.ee
+shrtm.nu
