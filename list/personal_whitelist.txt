@@ -733,3 +733,5 @@ goo.by
 wbze.de
 tr.ee
 shrtm.nu
+qrfy.com
+qrfy.io
