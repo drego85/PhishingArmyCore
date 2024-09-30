@@ -35,6 +35,7 @@ logging.basicConfig(filename="phishing.log",
 
 
 def parse_domain(url):
+    url = url.lower()
     registered_domain = tldcache(url).registered_domain
     sub_domain = tldcache(url).subdomain
 
