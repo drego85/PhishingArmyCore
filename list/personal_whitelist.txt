@@ -45,6 +45,7 @@ tradehq.com
 gamma.app
 satsback.com
 afrinic.net
+cake.me
 
 # Craft Docs
 craft.do
@@ -737,3 +738,8 @@ qrfy.com
 qrfy.io
 lynxinbio.com
 urlr.me
+#QRCodeChimp
+qrcc.me
+flowcode.com
+flowto.it
+qr-codes.io
