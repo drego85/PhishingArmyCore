@@ -25,8 +25,9 @@ header_phishtank = {"User-Agent": "phishtank/phishingarmy",
 
 tldcache = tldextract.TLDExtract()
 
-block_list = []
-block_list_extended = []
+block_list = set()
+block_list_extended = set()
+white_list = set()
 
 # LOG initialization
 logging.basicConfig(filename="phishing.log",
@@ -49,16 +50,16 @@ def parse_domain(url):
         full_domain = registered_domain
 
     if registered_domain and registered_domain not in white_list:
-        block_list.append(full_domain)
-        block_list_extended.append(full_domain)
+        block_list.add(full_domain)
+        block_list_extended.add(full_domain)
 
         if sub_domain == "www":
-            block_list_extended.append(registered_domain)
+            block_list_extended.add(registered_domain)
 
         # This integration has been suspended to avoid false positives.
         #
         # if full_domain != registered_domain:
-        #    block_list_extended.append(registered_domain)
+        #    block_list_extended.add(registered_domain)
 
 
 # Download data from phishtank.com
@@ -196,13 +197,6 @@ def phishuntio():
 
 # Load WhiteList
 def whitelist():
-    # Set Global the Whitelist
-    global white_list
-
-    # List of whitelisted domain
-    white_list = []
-
-    # Load Gobal Whitelist
     try:
         f = open("./list/global_whitelist.txt", "r")
 
@@ -211,7 +205,7 @@ def whitelist():
                 line = line.strip()
                 line = line.lower()
                 if not line.startswith("#"):
-                    white_list.append(line)
+                    white_list.add(line)
         f.close()
 
     except Exception as e:
@@ -227,7 +221,7 @@ def whitelist():
                 line = line.strip()
                 line = line.lower()
                 if not line.startswith("#"):
-                    white_list.append(line)
+                    white_list.add(line)
         f.close()
 
     except Exception as e:
@@ -258,9 +252,9 @@ def main():
     # Urlscan.io loading
     urlscanio()
 
-    # Eliminate duplicates and sort the generated lists
-    block_list_sorted = sorted(set(block_list))
-    block_list_extended_sorted = sorted(set(block_list_extended))
+    # Sort the generated lists
+    block_list_sorted = sorted(block_list)
+    block_list_extended_sorted = sorted(block_list_extended)
 
     logging.info("Generated the Blocklist containing %s domains" % len(block_list_sorted))
     logging.info("Generated the Extended Blocklist containing %s domains" % len(block_list_extended_sorted))
