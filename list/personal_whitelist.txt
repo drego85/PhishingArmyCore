@@ -748,3 +748,6 @@ qr-code.click
 shorter.me
 myqrcode.mobi
 s.ee
+qr-code.io
+qr-code.click
+scanned.page
