@@ -46,6 +46,9 @@ gamma.app
 satsback.com
 afrinic.net
 cake.me
+fillout.com
+cloud.microsoft
+microsoft.design
 
 # Craft Docs
 craft.do
