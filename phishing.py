@@ -117,9 +117,9 @@ def urlscanio():
             raise
 
 
-# Download data from OpenPhishing.com
+# Download data from OpenPhish
 def openphish():
-    url_download = "https://openphish.com/feed.txt"
+    url_download = "https://raw.githubusercontent.com/openphish/public_feed/refs/heads/main/feed.txt"
 
     try:
         r = requests.get(url_download, headers=header_desktop, timeout=timeout_connection)
