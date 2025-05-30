@@ -26,7 +26,7 @@ for line in f:
         line = line.rstrip()
         line = line.split(",")[1]
         line = line.lower()
-        registered_domain = tldcache(line).registered_domain
+        registered_domain = tldcache(line).top_domain_under_public_suffix
         white_list.append(registered_domain)
 
 f.close()
@@ -38,7 +38,7 @@ for line in f:
     if line:
         line = line.rstrip()
         line = line.lower()
-        registered_domain = tldcache(line).registered_domain
+        registered_domain = tldcache(line).top_domain_under_public_suffix
         white_list.append(registered_domain)
 
 f.close()
@@ -56,7 +56,7 @@ for url in urls_download:
             if line:
                 line = line.rstrip()
                 line = line.lower()
-                registered_domain = tldcache(line).registered_domain
+                registered_domain = tldcache(line).top_domain_under_public_suffix
                 if registered_domain:
                     white_list.append(registered_domain)
 

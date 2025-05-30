@@ -37,7 +37,7 @@ logging.basicConfig(filename="phishing.log",
 
 def parse_domain(url):
     url = url.lower()
-    registered_domain = tldcache(url).registered_domain
+    registered_domain = tldcache(url).top_domain_under_public_suffix
     sub_domain = tldcache(url).subdomain
 
     # Remove punycode domain
