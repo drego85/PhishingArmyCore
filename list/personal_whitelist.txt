@@ -754,3 +754,4 @@ s.ee
 qr-code.io
 qr-code.click
 scanned.page
+taap.it
