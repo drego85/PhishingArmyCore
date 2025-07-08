@@ -23,7 +23,6 @@ header_desktop = {"User-Agent": "Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 
 header_phishtank = {"User-Agent": "phishtank/phishingarmy",
                     "Accept-Language": "it,en-US;q=0.7,en;q=0.3"}
 
-tldcache = tldextract.TLDExtract()
 
 block_list = set()
 block_list_extended = set()
@@ -37,8 +36,8 @@ logging.basicConfig(filename="phishing.log",
 
 def parse_domain(url):
     url = url.lower()
-    registered_domain = tldcache(url).top_domain_under_public_suffix
-    sub_domain = tldcache(url).subdomain
+    registered_domain = tldextract(url).top_domain_under_public_suffix
+    sub_domain = tldextract(url).subdomain
 
     # Remove punycode domain
     registered_domain = registered_domain.encode("idna").decode("utf-8")
