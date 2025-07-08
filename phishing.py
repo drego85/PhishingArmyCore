@@ -36,8 +36,9 @@ logging.basicConfig(filename="phishing.log",
 
 def parse_domain(url):
     url = url.lower()
-    registered_domain = tldextract(url).top_domain_under_public_suffix
-    sub_domain = tldextract(url).subdomain
+    ext = tldextract.extract(url)
+    registered_domain = ext.top_domain_under_public_suffix
+    sub_domain = ext.subdomain
 
     # Remove punycode domain
     registered_domain = registered_domain.encode("idna").decode("utf-8")
