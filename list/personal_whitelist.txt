@@ -49,6 +49,7 @@ cake.me
 fillout.com
 cloud.microsoft
 microsoft.design
+0x0.st
 
 # Craft Docs
 craft.do
