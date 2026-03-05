@@ -757,3 +757,4 @@ qr-code.click
 scanned.page
 taap.it
 share.google
+qrto.org
