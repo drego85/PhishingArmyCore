@@ -14,6 +14,7 @@ import Config
 import logging
 import requests
 import tldextract
+import validators
 from datetime import datetime
 
 timeout_connection = 120
@@ -36,18 +37,18 @@ logging.basicConfig(filename="phishing.log",
 
 def parse_domain(url):
     url = url.lower()
-    ext = tldextract.extract(url)
-    registered_domain = ext.top_domain_under_public_suffix
-    sub_domain = ext.subdomain
+
+    ext = tldextract.extract(url)                           # http://forums.bbc.co.uk
+
+    registered_domain = ext.top_domain_under_public_suffix  # bbc.co.uk
+    sub_domain = ext.subdomain                              # forums
+    full_domain = ext.fqdn                                  # forums.bbc.co.uk
+
+    if not validators.domain(full_domain):
+        return
 
     # Remove punycode domain
-    registered_domain = registered_domain.encode("idna").decode("utf-8")
-    sub_domain = sub_domain.encode("idna").decode("utf-8")
-
-    if sub_domain:
-        full_domain = sub_domain + "." + registered_domain
-    else:
-        full_domain = registered_domain
+    full_domain = full_domain.encode("idna").decode("utf-8")
 
     if registered_domain and registered_domain not in white_list:
         block_list.add(full_domain)
