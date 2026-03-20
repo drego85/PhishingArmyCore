@@ -50,6 +50,7 @@ fillout.com
 cloud.microsoft
 microsoft.design
 0x0.st
+antiphishing.biz
 
 # Craft Docs
 craft.do
