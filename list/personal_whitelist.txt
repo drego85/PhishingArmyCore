@@ -2,10 +2,8 @@
 googleusercontent.com
 googlezip.net
 htmlpasta.com
-netlify.app
 nsupdate.info
 csit.edu.in
-vercel.app
 elementfx.com
 accorcia.to
 klclick1.com
@@ -51,6 +49,8 @@ cloud.microsoft
 microsoft.design
 0x0.st
 antiphishing.biz
+infinitepay.io
+hub.la
 
 # Craft Docs
 craft.do
@@ -759,3 +759,4 @@ scanned.page
 taap.it
 share.google
 qrto.org
+lnk.ink
