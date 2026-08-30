@@ -1,4 +1,7 @@
 # Other domains reported by users
+# Google Search Ads serving domains
+adsensecustomsearchads.com
+syndicatedsearch.goog
 googleusercontent.com
 googlezip.net
 htmlpasta.com
@@ -50,7 +53,8 @@ microsoft.design
 0x0.st
 antiphishing.biz
 infinitepay.io
-hub.la
+pay.hub.la
+checkout.hub.la
 
 # Craft Docs
 craft.do
