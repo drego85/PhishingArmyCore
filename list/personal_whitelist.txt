@@ -53,8 +53,8 @@ microsoft.design
 0x0.st
 antiphishing.biz
 infinitepay.io
-pay.hub.la
-checkout.hub.la
+hub.la
+vk.ru
 
 # Craft Docs
 craft.do
@@ -764,3 +764,4 @@ taap.it
 share.google
 qrto.org
 lnk.ink
+qrcodechimp.page
