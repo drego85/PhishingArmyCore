@@ -38,6 +38,16 @@ class HttpClient:
     def get(
         self, url: str, *, attempts: int | None = None, **kwargs: Any
     ) -> requests.Response:
+        return self._request("get", url, attempts=attempts, **kwargs)
+
+    def post(
+        self, url: str, *, attempts: int | None = None, **kwargs: Any
+    ) -> requests.Response:
+        return self._request("post", url, attempts=attempts, **kwargs)
+
+    def _request(
+        self, method: str, url: str, *, attempts: int | None = None, **kwargs: Any
+    ) -> requests.Response:
         attempt_limit = self.attempts if attempts is None else attempts
         if attempt_limit < 1:
             raise ValueError("HTTP attempts must be at least one")
@@ -45,7 +55,7 @@ class HttpClient:
         for attempt in range(attempt_limit):
             response: requests.Response | None = None
             try:
-                response = self.session.get(url, timeout=self.timeout, **kwargs)
+                response = getattr(self.session, method)(url, timeout=self.timeout, **kwargs)
                 if response.status_code not in (429, 500, 502, 503, 504):
                     response.raise_for_status()
                     return response

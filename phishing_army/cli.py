@@ -8,6 +8,7 @@ from pathlib import Path
 from contextlib import nullcontext
 
 from .builder import build, live_lookup
+from .cache import purge_cloudflare
 from .config import load_settings
 from .domain import WhitelistPolicy, normalize_domain
 from .maintenance import compare_with_public, generate_whitelist_candidate
@@ -33,6 +34,7 @@ def _parser() -> argparse.ArgumentParser:
         "whitelist-candidate", help="create a manually reviewed Tranco whitelist candidate"
     )
     whitelist_parser.add_argument("--output", type=Path)
+    subparsers.add_parser("purge-cache", help="retry a configured public-feed cache purge")
     return parser
 
 
@@ -60,8 +62,28 @@ def main(argv: list[str] | None = None) -> int:
                     minimum_entries=args.minimum_entries,
                     minimum_previous_ratio=args.minimum_previous_ratio,
                 )
+                if not args.dry_run and args.output is None:
+                    purge = purge_cloudflare(settings, manifest)
+                    if purge["status"] == "failed":
+                        logging.warning(
+                            "Feeds published; Cloudflare cache purge failed: %s", purge["error"]
+                        )
+                    elif purge["status"] == "ok":
+                        logging.info("Cloudflare cache purged for %d URLs", purge["urls"])
+                    # Operational status stays outside the already installed public manifest.
+                    manifest = {**manifest, "cloudflare_purge": purge}
             print(json.dumps(manifest, indent=2, sort_keys=True))
             return 0
+        if command == "purge-cache":
+            with generation_lock(settings.output_directory):
+                manifest = json.loads(
+                    (settings.output_directory / "phishing-army-manifest.json").read_text(
+                        encoding="utf-8"
+                    )
+                )
+                purge = purge_cloudflare(settings, manifest)
+            print(json.dumps(purge, indent=2, sort_keys=True))
+            return 0 if purge["status"] == "ok" else 2
         if command == "lookup":
             policy = WhitelistPolicy.from_directory(PROJECT_ROOT / "list")
             result = build(settings, policy)

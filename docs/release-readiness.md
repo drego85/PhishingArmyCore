@@ -46,3 +46,31 @@ A temporary live build generated at 08:12:28 UTC on 13 October 2026 completed wi
 Comparison at 08:12:49 UTC found 140,844 common entries, 19,081 candidate-only entries and 237 public-only entries; the public feed had 141,081 entries. Six public-only entries are suppressed by the current whitelist policy. The remaining 231 are absent from the local snapshot, but comparison alone cannot distinguish changes in live source contents from differences in collection. These are separate snapshots, not a controlled comparison of old and new generators against identical source data. No production files or cron configuration were changed.
 
 The HTTPS apex returned 200 with a valid certificate and `Cache-Control: no-store` on 12 October 2026. A fresh check on 13 October still found that the certificate for `www.amiprotected.it` does not match that hostname; the operator is arranging it. A TLS error must not be mistaken for working filtering.
+
+## Distribution follow-up: 13 October 2026
+
+The operator published the new Core generation on the production server at
+08:47:22 UTC, with all nine sources healthy and 159,921 entries. The legacy
+URLs were purged manually, and their public hashes matched the canonical file.
+Cloudflare's cache rule uses a two-hour Edge TTL and a fifteen-minute Browser
+TTL for feed paths; the two legacy Page Rules are disabled. A scoped compression
+rule and Smart Tiered Cache were subsequently enabled through the operator's
+authorized MCP connection.
+
+Live gzip tests transferred Unbound in 1,281,793 bytes instead of 9,096,603 and
+RPZ in 1,681,752 bytes instead of 9,875,909. Decompressed hashes matched the
+public manifest. Brotli and uncompressed requests were also checked.
+
+Core now supports an optional ten-URL Cloudflare purge after successful default
+publication, plus a standalone retry command. Explicit shadow outputs and dry
+runs do not purge public cache; failed publication never purges. API failure is
+reported without undoing disk publication, following bounded retry and token
+redaction rules. A zone-scoped Cache Purge token must be configured privately on
+the production server before automatic purge is enabled.
+
+The updated suite passes 67 tests. A shadow build at 09:41:50 UTC completed with
+all nine sources healthy and 159,900 canonical domains. Public comparison at
+09:42:07 UTC found 159,355 common, 545 candidate-only and 566 public-only domains
+across separate source snapshots. This development build did not publish any
+production feeds or purge the public cache. DNSSEC still requires coordination
+with the operator's registrar.

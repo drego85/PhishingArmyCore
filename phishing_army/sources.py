@@ -62,6 +62,7 @@ class Source:
                 settings.urlscan_token,
                 settings.urlabuse_email,
                 settings.urlabuse_token,
+                settings.cloudflare_token,
             ):
                 if secret:
                     for representation in (secret, quote_plus(secret)):

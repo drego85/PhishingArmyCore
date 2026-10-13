@@ -93,6 +93,37 @@ Scheduled and manual `build` executions use a persistent `.phishing-army-build.l
 
 The canonical indicators are identical across formats, but matching semantics differ: hosts files are exact-host entries, while Adblock, DNSMasq, Unbound and RPZ rules also cover descendants. Plain-domain and wildcard consumers apply their own matching rules. Resolver configuration files require validation, loading and periodic refresh by the consuming system.
 
+## Optional Cloudflare cache purge
+
+Cloudflare can cache the public feeds efficiently while still making a successful
+generation available promptly. To enable a targeted purge, set `cloudflaretoken`
+and `cloudflarezoneid` in the ignored production `Config.py`. Use a custom API
+token with only **Zone / Cache Purge / Purge** permission, restricted to the
+`phishing.army` zone. The zone ID is available in the Cloudflare dashboard.
+
+The default `build` command purges the nine generated feed URLs and the manifest
+under `https://phishing.army/download/`, only after all files and the manifest
+have been installed. It never purges the entire zone or the website. The build
+lock remains held through this operation. Builds with `--output`, dry runs,
+lookup, comparison and whitelist maintenance never purge public cache.
+
+Purge is disabled when both settings are empty. Incomplete configuration or API
+failure is reported in the command's `cloudflare_purge` JSON field and the log;
+it does not roll back a successfully published feed or change the public
+manifest. HTTP retries are bounded and honor rate-limit backoff. Tokens and API
+error messages are never printed. If a purge fails, the existing Edge TTL still
+applies. Retry only the purge without fetching sources or generating feeds:
+
+```bash
+venv/bin/python phishing.py purge-cache
+```
+
+On 13 October 2026, Smart Tiered Cache and Brotli/gzip compression for public
+feed paths were enabled on the production Cloudflare zone. Compression is
+negotiated through `Accept-Encoding`; clients requesting uncompressed data
+continue to receive it. Cache purge does not clear files already stored by
+client browsers or software.
+
 ## Three-hour staging comparison
 
 Before production rollout, run a shadow build every three hours for several days and compare it with the current public extended list:

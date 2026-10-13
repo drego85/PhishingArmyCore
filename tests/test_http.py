@@ -41,3 +41,15 @@ class HttpTests(unittest.TestCase):
                 client.get("https://example.com/feed")
         client.session.get.assert_called_once()
         sleep.assert_not_called()
+
+    def test_post_has_bounded_retries_and_honors_retry_after(self):
+        client = HttpClient(timeout=20, attempts=2)
+        client.session.post = Mock(side_effect=[
+            self.response(429, **{"Retry-After": "7"}), self.response(200),
+        ])
+        with patch("phishing_army.http.time.sleep") as sleep:
+            response = client.post("https://example.com/purge", json={"files": []})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(client.session.post.call_count, 2)
+        self.assertEqual(client.session.post.call_args.kwargs["timeout"], 20)
+        sleep.assert_called_once_with(7.0)

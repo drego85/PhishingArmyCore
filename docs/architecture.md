@@ -18,12 +18,22 @@ Malformed indicators are discarded during normalization. All four policy files m
 
 The CLI holds a nonblocking POSIX file lock in the output directory throughout collection and publication, preventing simultaneous scheduled or manual builds from publishing interleaved artifacts. This serializes writers; atomic file replacement and the manifest-last rule still apply individually rather than as a whole-directory transaction.
 
+An optional Cloudflare URL purge runs under that same lock after successful
+default production publication. It targets only the known nine feed filenames
+and their manifest on `phishing.army`. Dry runs and explicit staging outputs do
+not trigger it. Failed purges are reported separately from successful disk
+publication, with bounded retries and generic credential-safe errors. An
+explicit `purge-cache` command retries this operation without collecting or
+publishing indicators. Operational purge results are not written back into the
+already installed public manifest.
+
 There is no source-indicator database. `lookup` repeats the live fetch and reports which current sources contain the requested domain. `compare` is a quality-assurance operation whose JSON can be logged externally during a shadow rollout.
 
 ## Module map
 
 - `phishing_army/sources.py`: provider adapters and source isolation.
 - `phishing_army/http.py`: HTTP timeouts, retry and rate-limit handling.
+- `phishing_army/cache.py`: optional targeted Cloudflare purge after publication.
 - `phishing_army/domain.py`: normalization and whitelist policy.
 - `phishing_army/builder.py`: aggregation and live lookup.
 - `phishing_army/output.py`: renderers, guards, atomic publication and manifest.
