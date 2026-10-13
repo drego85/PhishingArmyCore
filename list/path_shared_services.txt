@@ -1,0 +1,4 @@
+# URL shorteners and services where path-level abuse cannot be represented safely
+# in a DNS domain blocklist. The service and all descendants are protected.
+bit.ly
+link.me

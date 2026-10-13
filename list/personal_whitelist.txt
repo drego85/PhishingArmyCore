@@ -765,3 +765,10 @@ share.google
 qrto.org
 lnk.ink
 qrcodechimp.page
+link.me
+# Hoxhunt: authorized phishing simulations for security awareness training
+authentication.ms
+security.email-microsoft.com
+# Amazon Prime settlement refunds: official website referenced by the FTC
+# Source: https://www.ftc.gov/enforcement/refunds/amazon-refunds
+subscriptionmembershipsettlement.com

@@ -1,0 +1,17 @@
+{
+  "generated_at": "2026-10-12T07:59:20Z",
+  "approved_at": "2026-10-12T08:19:18Z",
+  "tranco_id": "4672X",
+  "tranco_url": "https://tranco-list.eu/top-1m.csv.zip",
+  "tranco_archive_sha256": "7de2ee32182ef920a21e099696bf8abd22d0965961fb142a000030a45a9d327a",
+  "entries": 999685,
+  "whitelist_sha256": "08755f53b4a6bc87e94e4d2e8799593c45f8525c7694bfb0a6b3a9e42274127a",
+  "excluded_current_blocklist_conflicts": 345,
+  "conflict_reference_url": "https://phishing.army/download/phishing_army_blocklist_extended.txt",
+  "additional_inputs": [
+    "list/business_domains.txt",
+    "https://raw.githubusercontent.com/anudeepND/whitelist/master/domains/whitelist.txt",
+    "https://raw.githubusercontent.com/anudeepND/whitelist/master/domains/referral-sites.txt",
+    "https://raw.githubusercontent.com/anudeepND/whitelist/master/domains/optional-list.txt"
+  ]
+}

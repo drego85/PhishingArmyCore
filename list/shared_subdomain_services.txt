@@ -1,0 +1,36 @@
+# Shared hosting and dynamic DNS roots.
+# Protect the root itself while allowing an observed tenant hostname to be blocked.
+000webhost.com
+appwrite.network
+awsapprunner.com
+bolt.host
+cloudclusters.net
+cloudwaysapps.com
+cloudworkstations.dev
+edgeone.app
+edgeone.dev
+framer.media
+github.io
+hosted.phplist.com
+inbrowser.link
+ionoscloud.com
+mailersend.net
+mybluehost.me
+myclickfunnels.com
+mytemp.website
+netlify.app
+no-ip.com
+nxcli.io
+onamaeweb.jp
+pages.dev
+up.railway.app
+usercontent.dev
+us.cc
+val.run
+vercel.app
+wasmer.app
+weebly.com
+webwave.dev
+weglot.io
+zapier.app
+zeabur.app
