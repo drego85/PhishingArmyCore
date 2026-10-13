@@ -12,6 +12,7 @@ These rules are architectural invariants, not optional style preferences.
 - Render every format from one canonical domain set; do not add format-specific indicators.
 - Isolate source failures, use bounded retries, respect rate limits and refuse unsafe publication.
 - Never commit, print or log tokens. Treat `Config.py` as secret and keep `Config.sample.py` empty.
+- Scope the private configuration ignore rule to `/Config.py`; the internal `phishing_army/config.py` module must be tracked. Validate CLI imports and the regression suite from a clean tracked-file export before release.
 - Keep output deterministic and atomically replaced; install the manifest last.
 - Do not change production cron jobs or publish feeds from development tooling.
 - Test in a temporary output directory and compare shadow builds with the public list before rollout.

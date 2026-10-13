@@ -107,7 +107,7 @@ venv.bak/
 
 .idea/
 .DS_Store
-Config.py
+/Config.py
 test/
 /list/online-valid.json.gz
 /list/global_whitelist.candidate.txt
