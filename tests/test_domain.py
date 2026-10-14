@@ -212,6 +212,39 @@ class DomainTests(unittest.TestCase):
             {"synthetic-reported-bucket.storage.googleapis.com", f"{discord}.example.com"},
         )
 
+    def test_firebase_storage_path_service_is_protected_without_allowing_other_apis(self):
+        root = Path(__file__).resolve().parent.parent / "list"
+        firebase = "firebasestorage.googleapis.com"
+        personal = load_domain_file(root / "personal_whitelist.txt", required=True)
+        path_shared = load_domain_file(root / "path_shared_services.txt", required=True)
+        shared = load_domain_file(root / "shared_subdomain_services.txt", required=True)
+        self.assertIn(firebase, personal)
+        self.assertIn(firebase, path_shared)
+        self.assertNotIn("googleapis.com", personal)
+        self.assertNotIn("googleapis.com", path_shared)
+        values = {
+            firebase,
+            f"https://{firebase}/v0/b/synthetic-bucket/o/synthetic-file?alt=media",
+            f"sub.{firebase}",
+            "synthetic-reported-api.googleapis.com",
+            "synthetic-reported-bucket.storage.googleapis.com",
+            f"{firebase}.example.com",
+        }
+        for kind in ("personal", "path_shared"):
+            with self.subTest(kind=kind):
+                policy = WhitelistPolicy(
+                    set(), personal if kind == "personal" else set(),
+                    shared, path_shared if kind == "path_shared" else set(),
+                )
+                self.assertEqual(
+                    balanced_domains(values, policy),
+                    {
+                        "synthetic-reported-api.googleapis.com",
+                        "synthetic-reported-bucket.storage.googleapis.com",
+                        f"{firebase}.example.com",
+                    },
+                )
+
     def test_reviewed_shared_catalog_blocks_only_observed_tenants(self):
         catalog = WhitelistPolicy.from_directory(
             Path(__file__).resolve().parent.parent / "list"

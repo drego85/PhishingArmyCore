@@ -6,6 +6,9 @@ syndicatedsearch.goog
 # Discord attachment uploads: shared user files cannot be isolated at DNS level
 discord-attachments-uploads-prd.storage.googleapis.com
 
+# Firebase Storage: shared bucket/object paths cannot be isolated at DNS level
+firebasestorage.googleapis.com
+
 googleusercontent.com
 googlezip.net
 htmlpasta.com
