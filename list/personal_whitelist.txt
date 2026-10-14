@@ -2,6 +2,10 @@
 # Google Search Ads serving domains
 adsensecustomsearchads.com
 syndicatedsearch.goog
+
+# Discord attachment uploads: shared user files cannot be isolated at DNS level
+discord-attachments-uploads-prd.storage.googleapis.com
+
 googleusercontent.com
 googlezip.net
 htmlpasta.com

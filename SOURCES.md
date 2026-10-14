@@ -37,10 +37,13 @@ The following additional boundaries are supported by public provider documentati
 | `myclickfunnels.com` | [ClickFunnels workspace subdomains](https://support.myclickfunnels.com/docs/how-to-add-a-new-workspace-1) |
 | `hosted.phplist.com` | [phpList account-specific hosted installations](https://www.phplist.com/knowledgebase/how-to-add-sub-account/) |
 | `up.railway.app` | [Railway service domains](https://docs.railway.com/networking/domains/working-with-domains) |
+| `storage.googleapis.com` | [Google Cloud Storage bucket hostname and path-style endpoints](https://docs.cloud.google.com/storage/docs/request-endpoints) |
 
 The phpList and Railway exceptions are deliberately restricted to `hosted.phplist.com` and `up.railway.app`; they do not turn the providers' entire institutional domains into tenant namespaces. Monthly whitelist candidate checks use these same boundaries, so a safe platform-parent ranking is not rejected merely because one hosted tenant is blocked. Ordinary non-shared namespaces and explicitly ranked blocked tenants still require review.
 
 Shared storage nodes, regional endpoints and URL shorteners are not classified as independent tenant hosts merely because they have subdomains. Path-level abuse on a multi-user hostname cannot be isolated by a DNS blocklist and needs separate operator review.
+
+Google Cloud Storage is a reviewed exception with two documented addressing styles: `storage.googleapis.com/BUCKET/OBJECT` and `BUCKET.storage.googleapis.com/OBJECT`. The exact `storage.googleapis.com` endpoint is protected as a shared boundary; path-style reports must not block every bucket. Reported bucket hostnames remain independently blockable even when Tranco ranks `googleapis.com` or `storage.googleapis.com`. The Discord attachment-upload bucket `discord-attachments-uploads-prd.storage.googleapis.com` is explicitly personally allowlisted because its shared user files cannot be isolated at DNS level. This narrow exception does not allowlist sibling buckets or all of Google Cloud Storage.
 
 `link.me` is a path-based link-in-bio platform: individual creator pages share the same hostname. It is explicitly allowed in `list/personal_whitelist.txt` and classified in `list/path_shared_services.txt` because blocking one reported page at DNS level would also block unrelated legitimate pages.
 

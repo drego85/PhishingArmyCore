@@ -4,6 +4,7 @@ import unittest
 import zipfile
 from pathlib import Path
 
+from phishing_army.domain import load_domain_file
 from phishing_army.maintenance import (
     _candidate_conflicts, generate_whitelist_candidate, parse_domain_list,
 )
@@ -31,6 +32,19 @@ class Client:
 
 
 class MaintenanceTests(unittest.TestCase):
+    def test_google_storage_candidate_conflicts_preserve_bucket_boundaries(self):
+        shared = load_domain_file(
+            Path(__file__).resolve().parent.parent / "list/shared_subdomain_services.txt",
+            required=True,
+        )
+        tenant = "synthetic-reported-bucket.storage.googleapis.com"
+        self.assertEqual(
+            _candidate_conflicts(
+                {"googleapis.com", "storage.googleapis.com", tenant}, {tenant}, shared
+            ),
+            {tenant},
+        )
+
     def test_candidate_conflicts_respect_nested_shared_boundaries(self):
         boundary = "hosted.example.com"
         tenant = f"synthetic-reported-tenant.{boundary}"

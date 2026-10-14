@@ -2,7 +2,9 @@ import unittest
 import tempfile
 from pathlib import Path
 
-from phishing_army.domain import WhitelistPolicy, balanced_domains, normalize_domain
+from phishing_army.domain import (
+    WhitelistPolicy, balanced_domains, load_domain_file, normalize_domain,
+)
 
 
 class DomainTests(unittest.TestCase):
@@ -168,6 +170,48 @@ class DomainTests(unittest.TestCase):
         policy = WhitelistPolicy(set(), {"netlify.app"}, {"netlify.app"}, set())
         self.assertEqual(balanced_domains({"phish.netlify.app"}, policy), set())
 
+    def test_google_storage_boundary_protects_root_without_allowing_all_buckets(self):
+        root = Path(__file__).resolve().parent.parent / "list"
+        shared = load_domain_file(root / "shared_subdomain_services.txt", required=True)
+        self.assertIn("storage.googleapis.com", shared)
+        values = {
+            "storage.googleapis.com",
+            "https://storage.googleapis.com/synthetic-reported-bucket/login.html",
+            "https://synthetic-reported-bucket.storage.googleapis.com/login.html",
+            "sub.synthetic-reported-bucket.storage.googleapis.com",
+        }
+        expected = {
+            "synthetic-reported-bucket.storage.googleapis.com",
+            "sub.synthetic-reported-bucket.storage.googleapis.com",
+        }
+        for ranked in (set(), {"googleapis.com", "storage.googleapis.com"}):
+            with self.subTest(ranked=ranked):
+                # No personal exception: the catalog alone must protect the root.
+                policy = WhitelistPolicy(ranked, set(), shared, set())
+                self.assertEqual(balanced_domains(values, policy), expected)
+
+    def test_discord_storage_personal_exception_does_not_allow_sibling_buckets(self):
+        root = Path(__file__).resolve().parent.parent / "list"
+        personal = load_domain_file(root / "personal_whitelist.txt", required=True)
+        shared = load_domain_file(root / "shared_subdomain_services.txt", required=True)
+        discord = "discord-attachments-uploads-prd.storage.googleapis.com"
+        self.assertIn(discord, personal)
+        self.assertNotIn("storage.googleapis.com", personal)
+        policy = WhitelistPolicy({"googleapis.com"}, personal, shared, set())
+        self.assertEqual(
+            balanced_domains(
+                {
+                    "storage.googleapis.com",
+                    f"https://{discord}/synthetic-file",
+                    f"sub.{discord}",
+                    "synthetic-reported-bucket.storage.googleapis.com",
+                    f"{discord}.example.com",
+                },
+                policy,
+            ),
+            {"synthetic-reported-bucket.storage.googleapis.com", f"{discord}.example.com"},
+        )
+
     def test_reviewed_shared_catalog_blocks_only_observed_tenants(self):
         catalog = WhitelistPolicy.from_directory(
             Path(__file__).resolve().parent.parent / "list"
@@ -180,6 +224,7 @@ class DomainTests(unittest.TestCase):
             "myclickfunnels.com": "myclickfunnels.com",
             "hosted.phplist.com": "phplist.com",
             "up.railway.app": "railway.app",
+            "storage.googleapis.com": "googleapis.com",
         }
         for boundary, platform in boundaries.items():
             with self.subTest(boundary=boundary):
@@ -213,6 +258,7 @@ class DomainTests(unittest.TestCase):
         boundaries = (
             "mybluehost.me", "cloudwaysapps.com", "cloudclusters.net",
             "weebly.com", "myclickfunnels.com", "hosted.phplist.com", "up.railway.app",
+            "storage.googleapis.com",
         )
         for boundary in boundaries:
             tenant = f"synthetic-reviewed-tenant.{boundary}"

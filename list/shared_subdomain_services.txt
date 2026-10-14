@@ -23,6 +23,7 @@ no-ip.com
 nxcli.io
 onamaeweb.jp
 pages.dev
+storage.googleapis.com
 up.railway.app
 usercontent.dev
 us.cc
