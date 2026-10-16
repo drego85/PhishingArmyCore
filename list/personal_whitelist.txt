@@ -9,6 +9,9 @@ discord-attachments-uploads-prd.storage.googleapis.com
 # Firebase Storage: shared bucket/object paths cannot be isolated at DNS level
 firebasestorage.googleapis.com
 
+# DuckDNS official website and dynamic DNS update API; not user tenant hostnames
+www.duckdns.org
+
 googleusercontent.com
 googlezip.net
 htmlpasta.com

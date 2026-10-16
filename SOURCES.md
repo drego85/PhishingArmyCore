@@ -49,6 +49,8 @@ Google Cloud Storage is a reviewed exception with two documented addressing styl
 
 `firebasestorage.googleapis.com` is the shared Firebase Storage endpoint, with independent buckets and objects addressed through URL paths, as documented in [Firebase file downloads](https://firebase.google.com/docs/storage/web/download-files). It is explicitly allowed in `list/personal_whitelist.txt` and classified in `list/path_shared_services.txt`. Phishing or redirect abuse of individual resources does not justify a DNS block against every Firebase Storage user. This exception is not a safety certification for its contents and does not allowlist other `googleapis.com` services or Google Cloud Storage bucket hostnames.
 
+`www.duckdns.org` is explicitly allowed in `list/personal_whitelist.txt` because it is the provider's website and [documented dynamic DNS update API](https://www.duckdns.org/spec.jsp), not a user-assigned tenant. The private Public Suffix List still identifies `duckdns.org` as a shared boundary: reported user hostnames remain independently blockable. The personal exception must not be broadened to all of `duckdns.org`.
+
 ## Local harmless test indicators
 
 `amiprotected.it` is owned by the Phishing Army operator and hosts a harmless static filtering-test landing page. The apex and `www.amiprotected.it` are intentionally added on every build without a network fetch, API credentials, historical cursor or upstream phishing classification. They are separate from the nine active intelligence providers above and must never be reported to them as real phishing.

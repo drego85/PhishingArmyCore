@@ -245,6 +245,30 @@ class DomainTests(unittest.TestCase):
                     },
                 )
 
+    def test_duckdns_official_site_and_api_are_allowed_without_exempting_tenants(self):
+        root = Path(__file__).resolve().parent.parent / "list"
+        personal = load_domain_file(root / "personal_whitelist.txt", required=True)
+        self.assertIn("www.duckdns.org", personal)
+        self.assertNotIn("duckdns.org", personal)
+        tenant = "synthetic-reported-tenant.duckdns.org"
+        self.assertEqual(normalize_domain(tenant).private_suffix, "duckdns.org")
+        values = {
+            "duckdns.org",
+            "www.duckdns.org",
+            "https://www.duckdns.org/update?domains=synthetic-example",
+            "sub.www.duckdns.org",
+            tenant,
+            f"www.{tenant}",
+            "www.duckdns.org.example.com",
+        }
+        for ranked in (set(), {"duckdns.org"}):
+            with self.subTest(ranked=ranked):
+                policy = WhitelistPolicy(ranked, personal, set(), set())
+                self.assertEqual(
+                    balanced_domains(values, policy),
+                    {tenant, f"www.{tenant}", "www.duckdns.org.example.com"},
+                )
+
     def test_reviewed_shared_catalog_blocks_only_observed_tenants(self):
         catalog = WhitelistPolicy.from_directory(
             Path(__file__).resolve().parent.parent / "list"
