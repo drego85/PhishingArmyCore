@@ -46,11 +46,12 @@ def _banner(
     )
     lines = [
         "",
-        "Phishing Army | Community phishing domain blocklist",
+        "Title: Phishing Army | Community phishing domain blocklist",
         "Aggregated from independent phishing intelligence sources.",
         "Sources: PhishTank, OpenPhish, CERT.PL, Phishunt, urlscan.io, PhishStats,",
         "StalkPhish, URLAbuse and AntiPhish.org.",
         "",
+        "Expires: 1 day",
         f"Generated: {generated}",
         f"Entries: {count}",
         f"Format: {format_name}; version=1",
@@ -65,7 +66,7 @@ def _banner(
         "Policy: balanced protection with a focus on low false positives.",
         "Shared hosting and dynamic DNS platforms are not blocked wholesale.",
         "",
-        "Website: https://phishing.army/",
+        "Homepage: https://phishing.army/",
         "Report false positives: drego85@draghetti.it",
         "",
         "Free for personal and individual use.",
