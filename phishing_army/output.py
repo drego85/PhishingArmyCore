@@ -51,7 +51,7 @@ def _banner(
         "Sources: PhishTank, OpenPhish, CERT.PL, Phishunt, urlscan.io, PhishStats,",
         "StalkPhish, URLAbuse and AntiPhish.org.",
         "",
-        "Expires: 1 day",
+        "Expires: 4 hours",
         f"Generated: {generated}",
         f"Entries: {count}",
         f"Format: {format_name}; version=1",

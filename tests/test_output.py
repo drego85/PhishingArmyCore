@@ -1,4 +1,5 @@
 import json
+import re
 import stat
 import tempfile
 import unittest
@@ -7,12 +8,30 @@ from pathlib import Path
 from phishing_army.builder import TEST_DOMAINS, BuildResult, build
 from phishing_army.config import Settings
 from phishing_army.domain import WhitelistPolicy
-from phishing_army.output import LEGACY_FILES, generation_lock, publish, validate_publish
+from phishing_army.output import (
+    LEGACY_FILES, RENDERERS, generation_lock, publish, validate_publish,
+)
 from phishing_army.sources import Source
 from phishing_army.sources import SourceResult
 
 
 class OutputTests(unittest.TestCase):
+    def test_adblock_subscription_metadata_is_readable_and_expires_after_four_hours(self):
+        content = RENDERERS["phishing-army-adblock.txt"](
+            ["phish-example.com"], "2026-10-17T00:00:00Z"
+        )
+        # uBlock Origin extracts subscription metadata from the first 1024 characters.
+        metadata = dict(re.findall(
+            r"^(?:! *|# +)(Title|Homepage|Expires): *(.+)$",
+            content[:1024], re.MULTILINE,
+        ))
+        self.assertEqual(metadata, {
+            "Title": "Phishing Army | Community phishing domain blocklist",
+            "Homepage": "https://phishing.army/",
+            "Expires": "4 hours",
+        })
+        self.assertIn("\n||phish-example.com^\n", content)
+
     def test_generation_lock_rejects_overlapping_builds_and_releases(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

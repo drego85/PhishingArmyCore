@@ -88,6 +88,8 @@ All output formats contain the same balanced domain set:
 
 The legacy files `phishing_army_blocklist.txt` and `phishing_army_blocklist_extended.txt` remain available and are byte-for-byte identical to the canonical domain feed.
 
+The Adblock subscription includes `Title`, `Homepage` and `Expires: 4 hours` metadata. The expiry is a client refresh hint, separate from the three-hour generation schedule and Cloudflare cache TTLs; actual refresh timing depends on the consuming blocker.
+
 Files are rendered deterministically and replaced atomically. Publication is refused when every source fails, when fewer than 100 domains are produced, or when a candidate is below 25% of the previous published size. The manifest is installed last.
 Scheduled and manual `build` executions use a persistent `.phishing-army-build.lock` in the output directory to prevent overlap. Keep that lock file in place; its lock is released automatically when the process exits.
 
