@@ -115,6 +115,30 @@ class DomainTests(unittest.TestCase):
             set(),
         )
 
+    def test_biolink_profiles_are_allowed_without_exempting_unrelated_domains(self):
+        root = Path(__file__).resolve().parent.parent / "list"
+        personal = load_domain_file(root / "personal_whitelist.txt", required=True)
+        path_shared = load_domain_file(root / "path_shared_services.txt", required=True)
+        self.assertIn("biolink.website", personal)
+        self.assertIn("biolink.website", path_shared)
+        values = {
+            "biolink.website",
+            "https://biolink.website/synthetic-reported-profile",
+            "www.biolink.website",
+            "biolink.website.example.com",
+            "synthetic-reported-example.com",
+        }
+        for kind in ("personal", "path_shared"):
+            with self.subTest(kind=kind):
+                policy = WhitelistPolicy(
+                    set(), personal if kind == "personal" else set(),
+                    set(), path_shared if kind == "path_shared" else set(),
+                )
+                self.assertEqual(
+                    balanced_domains(values, policy),
+                    {"biolink.website.example.com", "synthetic-reported-example.com"},
+                )
+
     def test_hoxhunt_training_domains_are_personally_whitelisted(self):
         catalog = WhitelistPolicy.from_directory(
             Path(__file__).resolve().parent.parent / "list"

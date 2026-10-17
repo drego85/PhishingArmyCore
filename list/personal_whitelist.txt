@@ -776,6 +776,8 @@ qrto.org
 lnk.ink
 qrcodechimp.page
 link.me
+# Biolink: link-in-bio profiles share URL paths on the same hostname
+biolink.website
 # Hoxhunt: authorized phishing simulations for security awareness training
 authentication.ms
 security.email-microsoft.com
