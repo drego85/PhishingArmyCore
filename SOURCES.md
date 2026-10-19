@@ -53,6 +53,8 @@ Google Cloud Storage is a reviewed exception with two documented addressing styl
 
 `www.duckdns.org` is explicitly allowed in `list/personal_whitelist.txt` because it is the provider's website and [documented dynamic DNS update API](https://www.duckdns.org/spec.jsp), not a user-assigned tenant. The private Public Suffix List still identifies `duckdns.org` as a shared boundary: reported user hostnames remain independently blockable. The personal exception must not be broadened to all of `duckdns.org`.
 
+`www.netlify.app` is explicitly allowed in `list/personal_whitelist.txt`: its [HTTPS endpoint](https://www.netlify.app/) redirects to Netlify's official website at `https://www.netlify.com/`. This reviewed provider-website exception is separate from user-assigned Netlify tenants. The shared boundary `netlify.app` remains protected, while reported sibling tenant hostnames remain independently blockable; the exception must not be broadened to the entire platform namespace.
+
 ## Local harmless test indicators
 
 `amiprotected.it` is owned by the Phishing Army operator and hosts a harmless static filtering-test landing page. The apex and `www.amiprotected.it` are intentionally added on every build without a network fetch, API credentials, historical cursor or upstream phishing classification. They are separate from the nine active intelligence providers above and must never be reported to them as real phishing.

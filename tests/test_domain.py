@@ -293,6 +293,29 @@ class DomainTests(unittest.TestCase):
                     {tenant, f"www.{tenant}", "www.duckdns.org.example.com"},
                 )
 
+    def test_netlify_official_www_is_allowed_without_exempting_tenants(self):
+        root = Path(__file__).resolve().parent.parent / "list"
+        personal = load_domain_file(root / "personal_whitelist.txt", required=True)
+        shared = load_domain_file(root / "shared_subdomain_services.txt", required=True)
+        self.assertIn("www.netlify.app", personal)
+        self.assertNotIn("netlify.app", personal)
+        tenant = "synthetic-reported-tenant.netlify.app"
+        values = {
+            "netlify.app",
+            "https://www.netlify.app/",
+            "www.netlify.app/docs",
+            "sub.www.netlify.app",
+            tenant,
+            "www.netlify.app.example.com",
+        }
+        for ranked in (set(), {"netlify.app"}):
+            with self.subTest(ranked=ranked):
+                policy = WhitelistPolicy(ranked, personal, shared, set())
+                self.assertEqual(
+                    balanced_domains(values, policy),
+                    {tenant, "www.netlify.app.example.com"},
+                )
+
     def test_reviewed_shared_catalog_blocks_only_observed_tenants(self):
         catalog = WhitelistPolicy.from_directory(
             Path(__file__).resolve().parent.parent / "list"

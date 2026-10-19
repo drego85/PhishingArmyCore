@@ -12,6 +12,9 @@ firebasestorage.googleapis.com
 # DuckDNS official website and dynamic DNS update API; not user tenant hostnames
 www.duckdns.org
 
+# Netlify platform website redirect; user-assigned tenant hostnames remain blockable
+www.netlify.app
+
 googleusercontent.com
 googlezip.net
 htmlpasta.com
