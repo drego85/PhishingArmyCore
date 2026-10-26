@@ -139,6 +139,39 @@ class DomainTests(unittest.TestCase):
                     {"biolink.website.example.com", "synthetic-reported-example.com"},
                 )
 
+    def test_github_release_assets_are_allowed_without_exempting_other_namespaces(self):
+        root = Path(__file__).resolve().parent.parent / "list"
+        personal = load_domain_file(root / "personal_whitelist.txt", required=True)
+        path_shared = load_domain_file(root / "path_shared_services.txt", required=True)
+        assets = "release-assets.githubusercontent.com"
+        self.assertIn(assets, personal)
+        self.assertIn(assets, path_shared)
+        self.assertNotIn("githubusercontent.com", personal)
+        self.assertNotIn("githubusercontent.com", path_shared)
+        values = {
+            "githubusercontent.com",
+            assets,
+            f"https://{assets}/github-production-release-asset/synthetic-artifact",
+            f"sub.{assets}",
+            "synthetic-reported-project.githubusercontent.com",
+            f"{assets}.example.com",
+            "synthetic-reported-project.github.io",
+        }
+        for kind in ("personal", "path_shared"):
+            with self.subTest(kind=kind):
+                policy = WhitelistPolicy(
+                    set(), personal if kind == "personal" else set(),
+                    set(), path_shared if kind == "path_shared" else set(),
+                )
+                self.assertEqual(
+                    balanced_domains(values, policy),
+                    {
+                        "synthetic-reported-project.githubusercontent.com",
+                        f"{assets}.example.com",
+                        "synthetic-reported-project.github.io",
+                    },
+                )
+
     def test_hoxhunt_training_domains_are_personally_whitelisted(self):
         catalog = WhitelistPolicy.from_directory(
             Path(__file__).resolve().parent.parent / "list"

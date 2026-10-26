@@ -55,6 +55,8 @@ Google Cloud Storage is a reviewed exception with two documented addressing styl
 
 `www.netlify.app` is explicitly allowed in `list/personal_whitelist.txt`: its [HTTPS endpoint](https://www.netlify.app/) redirects to Netlify's official website at `https://www.netlify.com/`. This reviewed provider-website exception is separate from user-assigned Netlify tenants. The shared boundary `netlify.app` remains protected, while reported sibling tenant hostnames remain independently blockable; the exception must not be broadened to the entire platform namespace.
 
+`release-assets.githubusercontent.com` is [documented by GitHub as necessary for downloading release assets](https://docs.github.com/en/actions/reference/runners/self-hosted-runners#communication-requirements). Independent projects share this hostname, with individual artifacts distinguished by URL paths. It is explicitly allowed in `list/personal_whitelist.txt` and classified in `list/path_shared_services.txt`: a DNS block would disrupt unrelated software downloads and updates. This exception is not a certification that every downloadable artifact is safe and does not allowlist the entire `githubusercontent.com` namespace or unrelated project hostnames.
+
 ## Local harmless test indicators
 
 `amiprotected.it` is owned by the Phishing Army operator and hosts a harmless static filtering-test landing page. The apex and `www.amiprotected.it` are intentionally added on every build without a network fetch, API credentials, historical cursor or upstream phishing classification. They are separate from the nine active intelligence providers above and must never be reported to them as real phishing.

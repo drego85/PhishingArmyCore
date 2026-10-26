@@ -5,3 +5,5 @@ bit.ly
 # Firebase Storage serves independent buckets and objects under one API hostname.
 firebasestorage.googleapis.com
 link.me
+# GitHub release assets from independent projects share this download hostname.
+release-assets.githubusercontent.com

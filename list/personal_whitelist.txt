@@ -15,6 +15,9 @@ www.duckdns.org
 # Netlify platform website redirect; user-assigned tenant hostnames remain blockable
 www.netlify.app
 
+# GitHub release downloads: shared artifact paths cannot be isolated at DNS level
+release-assets.githubusercontent.com
+
 googleusercontent.com
 googlezip.net
 htmlpasta.com
