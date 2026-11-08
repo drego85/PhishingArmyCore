@@ -115,6 +115,32 @@ class DomainTests(unittest.TestCase):
             set(),
         )
 
+    def test_ume_short_links_are_allowed_without_exempting_unrelated_domains(self):
+        root = Path(__file__).resolve().parent.parent / "list"
+        personal = load_domain_file(root / "personal_whitelist.txt", required=True)
+        path_shared = load_domain_file(root / "path_shared_services.txt", required=True)
+        self.assertIn("ume.la", personal)
+        self.assertIn("ume.la", path_shared)
+        values = {
+            "ume.la",
+            "https://ume.la/synthetic-short-link",
+            "https://ume.la/another-link?synthetic=value",
+            "www.ume.la",
+            "sub.ume.la",
+            "ume.la.example.com",
+            "synthetic-unrelated-shortener.la",
+        }
+        for kind in ("personal", "path_shared"):
+            with self.subTest(kind=kind):
+                policy = WhitelistPolicy(
+                    set(), personal if kind == "personal" else set(),
+                    set(), path_shared if kind == "path_shared" else set(),
+                )
+                self.assertEqual(
+                    balanced_domains(values, policy),
+                    {"ume.la.example.com", "synthetic-unrelated-shortener.la"},
+                )
+
     def test_biolink_profiles_are_allowed_without_exempting_unrelated_domains(self):
         root = Path(__file__).resolve().parent.parent / "list"
         personal = load_domain_file(root / "personal_whitelist.txt", required=True)

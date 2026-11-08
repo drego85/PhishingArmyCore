@@ -782,6 +782,8 @@ qrto.org
 lnk.ink
 qrcodechimp.page
 link.me
+# Ume.la: shared URL shortener; individual redirect paths cannot be blocked at DNS level
+ume.la
 # Biolink: link-in-bio profiles share URL paths on the same hostname
 biolink.website
 # Hoxhunt: authorized phishing simulations for security awareness training

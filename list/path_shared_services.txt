@@ -7,3 +7,5 @@ firebasestorage.googleapis.com
 link.me
 # GitHub release assets from independent projects share this download hostname.
 release-assets.githubusercontent.com
+# Ume.la short links share the same hostname across independent users.
+ume.la
